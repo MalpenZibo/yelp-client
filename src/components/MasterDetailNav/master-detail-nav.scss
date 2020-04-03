@@ -1,0 +1,10 @@
+.master-detail-nav {
+  a {
+    margin-right: 15px;
+  }
+
+  a:after {
+    margin-left: 15px;
+    content: ">";
+  }
+}
