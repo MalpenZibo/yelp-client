@@ -3,24 +3,25 @@ import View from '../View';
 import { WithQueries } from 'avenger/lib/react';
 import { currentView } from '../../queries';
 import { doUpdateCurrentView } from '../../commands';
-import { constNull } from 'fp-ts/lib/function';
-import { CurrentView } from 'src/model';
+import { constFalse } from 'fp-ts/lib/function';
+import { MenuViewType } from '../../model';
 
 import './master-detail-nav.scss';
 
-type OptionType = { value: CurrentView; label: string };
+type OptionType = { viewType: MenuViewType; label: string };
 
-const master: OptionType = { value: 'search', label: 'Search' }
-const detail: OptionType = { value: 'detail', label: 'Detail' }
+const master: OptionType = { viewType: 'search', label: 'Search' }
+const detail: OptionType = { viewType: 'detail', label: 'Detail' }
 
 export default class MasterDetailNav extends React.Component {
   goToMaster = () => {
-    doUpdateCurrentView(master.value).run();
+    doUpdateCurrentView({ view: 'search' }).run();
   };
 
   render() {
     return <WithQueries queries={{currentView}} render={queries => {
-      const isDetails = queries.fold(constNull, constNull, q => q.currentView == 'detail');
+      const isDetails = queries.fold(constFalse, constFalse, q => q.currentView.view == detail.viewType);
+      console.log(isDetails)
       if (isDetails) {
         return (
           <View className="master-detail-nav"><a onClick={() => this.goToMaster()}>{master.label}</a><strong>{detail.label}</strong></View>

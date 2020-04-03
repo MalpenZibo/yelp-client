@@ -6,6 +6,7 @@ import { constNull } from 'fp-ts/lib/function';
 import Details from '../Detail';
 import Search from '../Search';
 import MasterDetailNav from '../MasterDetailNav';
+import ScrollView from '../ScrollView';
 
 import './app.scss';
 
@@ -16,18 +17,20 @@ class App extends React.Component<typeof queries.Props> {
     return (
       <View column className="app">
         <View className="header" vAlignContent='center'>
-          <h1>Yeld</h1>
+          <h1>Yelp</h1>
           <MasterDetailNav />
         </View>
         
-        {this.props.queries.fold(constNull, constNull, ({ currentView }) => {
-          switch (currentView) {
-            case 'detail':
-              return <Details />;
-            case 'search':
-              return <Search />;
-          }
-        })}
+        <ScrollView className="content">
+          {this.props.queries.fold(constNull, constNull, ({ currentView }) => {
+            switch (currentView.view) {
+              case 'detail':
+                return <Details />;
+              case 'search':
+                return <Search />;
+            }
+          })}
+        </ScrollView>
       </View>
     );
   }

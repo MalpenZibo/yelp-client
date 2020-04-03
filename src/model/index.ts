@@ -1,43 +1,70 @@
-/*
+import * as t from 'io-ts'
+import { HistoryLocation } from 'avenger/lib/browser';
+import { fromNullable, fromEither } from 'fp-ts/lib/Option';
 
-You may write here any type that you want to re-use in you application.
+const unsafeCoerce = <A, B>(a: A): B => a as any
 
-ex:
-
-export type Foo = {
-  bar: number
+interface Iso<S, A> {
+  unwrap: (s: S) => A
+  wrap: (a: A) => S
 }
 
-and in any file:
+type Carrier<N extends Newtype<any, any>> = N['_A']
 
-import { Foo } from 'model'
+interface Newtype<URI, A> {
+  _URI: URI
+  _A: A
+}
 
-const foo: Foo = { bar: 5 }
+type AnyNewtype = Newtype<any, any>
 
+const iso = <S extends AnyNewtype>(): Iso<S, Carrier<S>> =>
+  ({ wrap: unsafeCoerce, unwrap: unsafeCoerce })
 
+export type UUID = string;
+export const UUID = t.string;
 
-Here we define a type `CurrentView` and two helper functions that are used
-in the example app created by default:
+export interface Id<A> extends Newtype<{ readonly Id: unique symbol, readonly Id_A: A }, UUID> {}
+export function idIso<A>() { return iso<Id<A>>() }
 
-*/
+export type MenuViewType =
+  | 'search'
+  | 'detail'
 
-import { HistoryLocation } from 'avenger/lib/browser';
+export type CurrentView = 
+  | { view: 'search' }
+  | { view: 'detail'; businessId: Id<Business> }
 
-export type CurrentView = 'search' | 'detail';
+export interface Business {
+}
 
 export function locationToView(location: HistoryLocation): CurrentView {
   switch (location.pathname) {
     case '/detail':
-      return 'detail';
+      return fromNullable(location.search.businessId)
+        .chain(businessId =>
+          fromEither(UUID.decode(businessId)).map<CurrentView>(businessId => ({
+            view: 'detail',
+            businessId: idIso<Business>().wrap(businessId)
+          }))
+        )
+        .getOrElse({
+          view: 'search'
+        });
     default:
-      return 'search';
+      return { view: 'search' };
   }
 }
 
 export function viewToLocation(view: CurrentView): HistoryLocation {
-  switch (view) {
+  switch (view.view) {
     case 'detail':
-      return { pathname: '/detail', search: {} };
+      return { 
+        pathname: '/detail', 
+        search: {
+          businessId: idIso<Business>().unwrap(view.businessId)
+        } 
+      };
     default:
       return { pathname: '/', search: {} };
   }

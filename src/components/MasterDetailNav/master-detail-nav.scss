@@ -1,6 +1,9 @@
 .master-detail-nav {
+  cursor: default;
+
   a {
     margin-right: 15px;
+    cursor: pointer;
   }
 
   a:after {
