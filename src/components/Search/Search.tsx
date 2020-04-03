@@ -1,11 +1,10 @@
 import * as React from 'react';
 import View from '../View';
 import { doUpdateCurrentView } from '../../commands';
-import { idIso, Business } from '../../model';
 
 export default class Search extends React.Component {
   goToDetails = () => {
-    doUpdateCurrentView({ view: 'detail', businessId: idIso<Business>().wrap("place-holder") }).run();
+    doUpdateCurrentView({ view: 'detail', businessId: "place-holder" }).run();
   };
 
   render() {
