@@ -1,5 +1,5 @@
 import * as React from 'react';
-import View from '../View';
+import View from '../Basic/View';
 import { doUpdateCurrentView } from '../../commands';
 import { UUID } from 'io-ts-types/lib/UUID';
 import { CurrentView } from 'src/model';

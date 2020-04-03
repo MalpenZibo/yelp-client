@@ -1,5 +1,5 @@
 import * as React from 'react';
-import View from '../View';
+import View from '../Basic/View';
 import { WithQueries } from 'avenger/lib/react';
 import { currentView } from '../../queries';
 import { doUpdateCurrentView } from '../../commands';

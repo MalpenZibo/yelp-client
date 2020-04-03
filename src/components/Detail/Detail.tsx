@@ -1,5 +1,5 @@
 import * as React from 'react';
-import View from '../View';
+import View from '../Basic/View';
 
 export default class Detail extends React.Component {
   render() {

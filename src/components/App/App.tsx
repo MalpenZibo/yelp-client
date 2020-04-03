@@ -1,12 +1,12 @@
 import * as React from 'react';
-import View from '../View';
+import View from '../Basic/View';
 import { declareQueries } from 'avenger/lib/react';
 import { currentView } from '../../queries';
 import { constNull } from 'fp-ts/lib/function';
 import Details from '../Detail';
 import Search from '../Search';
 import MasterDetailNav from '../MasterDetailNav';
-import ScrollView from '../ScrollView';
+import ScrollView from '../Basic/ScrollView';
 
 import './app.scss';
 
