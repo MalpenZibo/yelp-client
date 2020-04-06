@@ -1,0 +1,9 @@
+@import './variables.scss';
+
+html {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 14px;
+  font-weight: $regular;
+  color: $black;
+  -webkit-font-smoothing: antialiased;
+}

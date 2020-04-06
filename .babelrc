@@ -1,0 +1,16 @@
+{
+  "presets": [
+    [
+      "buildo",
+      {
+        "env": "react",
+        "modules": false,
+        "targets": {
+          "chrome": 65,
+          "edge": 15,
+          "ie": 11
+        }
+      }
+    ]
+  ]
+}

@@ -1,0 +1,6 @@
+*.log
+*.log*
+node_modules
+build/*
+*.tags*
+.DS_Store
