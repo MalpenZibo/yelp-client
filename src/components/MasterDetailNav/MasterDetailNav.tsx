@@ -21,7 +21,6 @@ export default class MasterDetailNav extends React.Component {
   render() {
     return <WithQueries queries={{currentView}} render={queries => {
       const isDetails = queries.fold(constFalse, constFalse, q => q.currentView.view == detail.viewType);
-      console.log(isDetails)
       if (isDetails) {
         return (
           <View className="master-detail-nav"><a onClick={() => this.goToMaster()}>{master.label}</a><strong>{detail.label}</strong></View>

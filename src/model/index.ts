@@ -1,8 +1,6 @@
 import * as t from 'io-ts'
 import { HistoryLocation } from 'avenger/lib/browser';
-
-export type UUID = string;
-export const UUID = t.string;
+import { UUID } from 'io-ts-types/lib/UUID'
 
 export type MenuViewType =
   | 'search'
@@ -23,13 +21,17 @@ export const Business = t.type({
 export function locationToView(location: HistoryLocation): CurrentView {
   switch (location.pathname) {
     case '/detail':
-      return location.search.businessId ?
-        {
-          view: 'detail',
-          businessId: location.search.businessId
+      return UUID.decode(location.search.businessId).fold<CurrentView>(
+        () => {
+          return { view: 'search' };
+        },
+        (businessId) => {
+          return {
+            view: 'detail',
+            businessId: businessId
+          };
         }
-        :
-        { view: 'search' }
+      )
     default:
       return { view: 'search' };
   }
