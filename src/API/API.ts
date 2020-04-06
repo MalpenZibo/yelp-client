@@ -6,15 +6,16 @@ import { identity } from 'fp-ts/lib/function'
 import * as t from 'io-ts'
 import { failure } from 'io-ts/lib/PathReporter';
 
-export const getRestaurants = (searchQuery: string): TaskEither<unknown, Array<Business>> => {
+export const getRestaurants = (searchQuery: string, locationQuery: string, radiusQuery: number): TaskEither<unknown, Array<Business>> => {
   return tryCatch(() =>
       axios({
         method: 'get',
         url: `${config.apiEndpoint}/businesses/search`,
         params: {
-          location: "Milan",
+          location: locationQuery,
           categories: "restaurants",
-          term: searchQuery
+          term: searchQuery,
+          radius: radiusQuery * 1000
         },
         data: {
 
