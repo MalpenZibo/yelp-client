@@ -1,7 +1,7 @@
 import View from './View';
-import ScrollView from './ScrollView'
+import Panel from './Panel';
 
 export {
   View,
-  ScrollView
+  Panel
 };

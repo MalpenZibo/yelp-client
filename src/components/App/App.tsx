@@ -6,7 +6,6 @@ import { constNull } from 'fp-ts/lib/function';
 import Details from '../Detail';
 import Search from '../Search';
 import MasterDetailNav from '../MasterDetailNav';
-import ScrollView from '../Basic/ScrollView';
 
 import './app.scss';
 
@@ -21,7 +20,7 @@ class App extends React.Component<typeof queries.Props> {
           <MasterDetailNav />
         </View>
         
-        <ScrollView className="content">
+        <View className="content" grow={1}>
           {this.props.queries.fold(constNull, constNull, ({ currentView }) => {
             switch (currentView.view) {
               case 'detail':
@@ -30,7 +29,7 @@ class App extends React.Component<typeof queries.Props> {
                 return <Search />;
             }
           })}
-        </ScrollView>
+        </View>
       </View>
     );
   }
