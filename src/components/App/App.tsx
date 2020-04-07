@@ -15,12 +15,12 @@ class App extends React.Component<typeof queries.Props> {
   render() {
     return (
       <View column className="app">
-        <View className="header" vAlignContent='center'>
+        <View className="header" vAlignContent="center">
           <h1>Yelp</h1>
           <MasterDetailNav />
         </View>
-        
-        <View className="content" grow={1}>
+
+        <View className="content" grow>
           {this.props.queries.fold(constNull, constNull, ({ currentView }) => {
             switch (currentView.view) {
               case 'detail':
@@ -34,6 +34,5 @@ class App extends React.Component<typeof queries.Props> {
     );
   }
 }
-
 
 export default queries(App);

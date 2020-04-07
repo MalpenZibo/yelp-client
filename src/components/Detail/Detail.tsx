@@ -5,7 +5,9 @@ import { InjectedIntlProps, injectIntl } from 'react-intl';
 class Detail extends React.Component<InjectedIntlProps> {
   render() {
     return (
-      <View column className="detail"><h3>Detail</h3></View>
+      <View column className="detail">
+        <h3>Detail</h3>
+      </View>
     );
   }
 }
