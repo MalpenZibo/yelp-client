@@ -2,14 +2,16 @@ import * as React from 'react';
 import { doUpdateCurrentView } from '../../commands';
 import { WithQueries } from 'avenger/lib/react';
 import { restaurants } from '../../queries/queries';
-import { Panel, LoadingSpinner, View, Input, SingleDropdown } from '../Basic';
+import { Panel, LoadingSpinner, View, ConfirmationInput, SingleDropdown } from '../Basic';
 import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl';
 import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
 
 import './search.scss';
 
 type State = {
+  searchInput: string;
   searchQuery: string;
+  locationInput: string;
   locationQuery: string;
   radiusQuery: { value: number; label: string };
 };
@@ -25,7 +27,9 @@ const radiusOptions: NonEmptyArray<{ value: number; label: string }> = new NonEm
 
 class Search extends React.Component<InjectedIntlProps, State> {
   state = {
+    searchInput: '',
     searchQuery: '',
+    locationInput: 'Milan',
     locationQuery: 'Milan',
     radiusQuery: radiusOptions.head
   };
@@ -35,11 +39,27 @@ class Search extends React.Component<InjectedIntlProps, State> {
   };
 
   onSearchChange = (value: string) => {
+    this.setState({ searchInput: value });
+  };
+
+  onSearchConfirm = (value: string) => {
     this.setState({ searchQuery: value });
   };
 
+  onSearchClear = () => {
+    this.setState({ searchQuery: '' });
+  };
+
   onLocationChange = (value: string) => {
+    this.setState({ locationInput: value });
+  };
+
+  onLocationConfirm = (value: string) => {
     this.setState({ locationQuery: value });
+  };
+
+  onLocationClear = () => {
+    this.setState({ locationQuery: '' });
   };
 
   onRadiusChange = (value: { value: number; label: string }) => {
@@ -77,20 +97,28 @@ class Search extends React.Component<InjectedIntlProps, State> {
             ({ restaurants }, loading) => (
               <View column hAlignContent="left" grow className="search">
                 <View className="search-inputs" shrink={false} wrap vAlignContent="center">
-                  <Input
+                  <ConfirmationInput
                     placeholder={intl.formatMessage({ id: 'Search.searchLabel' })}
-                    value={this.state.searchQuery}
+                    initialValue={this.state.searchInput}
                     onChange={this.onSearchChange}
+                    onConfirm={this.onSearchConfirm}
+                    onClear={this.onSearchClear}
+                    text={{ clear: 'X', toConfirm: undefined }}
+                    icon={{ clear: undefined, toConfirm: undefined }}
                   />
                   <View className="location">
                     <View column vAlignContent="center">
                       <h5>
                         <FormattedMessage id="Search.locationLabel" />
                       </h5>
-                      <Input
+                      <ConfirmationInput
                         placeholder={intl.formatMessage({ id: 'Search.locationLabel' })}
-                        value={this.state.locationQuery}
+                        initialValue={this.state.locationInput}
                         onChange={this.onLocationChange}
+                        onConfirm={this.onLocationConfirm}
+                        onClear={this.onLocationClear}
+                        text={{ clear: 'X', toConfirm: undefined }}
+                        icon={{ clear: undefined, toConfirm: undefined }}
                       />
                     </View>
                     <View column vAlignContent="center">
