@@ -3,7 +3,10 @@
     "en"
   ],
   "messages": {
-    "Hello.hello": "Hello {name}!",
-    "Hello.warningLength": "name length must be between 6 and 50"
+    "App.loading": "loading...",
+    "Search.loadingError": "there was a problem when fetching restaurants",
+    "Search.searchLabel": "Search",
+    "Search.locationLabel": "Location",
+    "Search.radiusLabel": "Radius"
   }
 }

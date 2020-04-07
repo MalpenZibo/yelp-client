@@ -1,11 +1,9 @@
 import * as React from 'react';
-import View from '../Basic/View';
 import { doUpdateCurrentView } from '../../commands';
 import { WithQueries } from 'avenger/lib/react';
 import { restaurants } from '../../queries/queries';
-import { Panel } from '../Basic';
-import Input from '../Basic/Input';
-import SingleDropdown from '../Basic/SingleDropdown';
+import { Panel, LoadingSpinner, View, Input, SingleDropdown } from '../Basic';
+import { FormattedMessage } from 'react-intl';
 
 import './search.scss';
 
@@ -16,8 +14,7 @@ type State = {
   locationQuery: string,
   locationInput: string,
 
-  radiusQuery: number,
-  radiusInput: { value: number, label: string }
+  radiusQuery: { value: number, label: string }
 }
 
 const radiusOptions = [
@@ -31,11 +28,9 @@ export default class Search extends React.Component<{}, State> {
   state = { 
     searchQuery: '', searchInput: '',
     locationQuery: 'Milan', locationInput: 'Milan',
-    radiusInput: radiusOptions[0],
-    radiusQuery: radiusOptions[0].value
+    radiusQuery: radiusOptions[0]
   };
   
-
   goToDetails = (id: string) => {
     doUpdateCurrentView({ view: 'detail', businessId: id }).run();
   };
@@ -61,17 +56,30 @@ export default class Search extends React.Component<{}, State> {
     };
 
     const onRadiusChange = (value: { value: number, label: string }) => {
-      this.setState({ radiusInput: value, radiusQuery: value.value });
+      this.setState({ radiusQuery: value });
     };
 
     return (
       <WithQueries
         queries={{ restaurants }}
-        params={{ restaurants: { searchQuery: this.state.searchQuery, locationQuery: this.state.locationQuery, radiusQuery :this.state.radiusQuery }}}
+        params={{ restaurants: { 
+          searchQuery: this.state.searchQuery, 
+          locationQuery: this.state.locationQuery, 
+          radiusQuery: this.state.radiusQuery.value 
+        }}}
         render={queries =>
           queries.fold(
-            () => <p>loading</p>,
-            () => <p>there was a problem when fetching restaurants</p>,
+            () => (
+              <LoadingSpinner
+                size={45}
+                message={{ content: 'loading...'}}
+              />
+            ),
+            () => (
+              <View hAlignContent="center" vAlignContent="center" grow={1}>
+                <h2><FormattedMessage id="Search.loadingError" /></h2>
+              </View>
+            ),
             ({ restaurants }) => (
               <View column hAlignContent="left" grow={1} className="search">
                 <View className="search-inputs">
@@ -80,17 +88,24 @@ export default class Search extends React.Component<{}, State> {
                     value={this.state.searchInput}
                     onChange={onSearchChange}
                   />
-                  <Input
-                    placeholder='Location'
-                    value={this.state.locationInput}
-                    onChange={onLocationChange}
-                  />
-                  <SingleDropdown
-                    value={this.state.radiusInput}
-                    onChange={onRadiusChange}
-                    placeholder="Select radius"
-                    options={radiusOptions}
-                  />
+                  <View vAlignContent="center">
+                    <h5><FormattedMessage id="Search.locationLabel" /></h5>
+                    <Input
+                      placeholder='Location'
+                      value={this.state.locationInput}
+                      onChange={onLocationChange}
+                    />
+                  </View>
+                  <View vAlignContent="center">
+                    <h5><FormattedMessage id="Search.radiusLabel" /></h5>
+                    <SingleDropdown
+                      value={this.state.radiusQuery}
+                      onChange={onRadiusChange}
+                      label="Radius"
+                      placeholder="Select radius"
+                      options={radiusOptions}
+                    />
+                  </View>
                 </View>
                 <View className="list" grow={1} wrap={true} vAlignContent="top">
                   {restaurants.map(
