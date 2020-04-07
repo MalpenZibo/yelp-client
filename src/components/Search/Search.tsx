@@ -4,6 +4,7 @@ import { WithQueries } from 'avenger/lib/react';
 import { restaurants } from '../../queries/queries';
 import { Panel, LoadingSpinner, View, Input, SingleDropdown } from '../Basic';
 import { FormattedMessage } from 'react-intl';
+import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray'
 
 import './search.scss';
 
@@ -17,18 +18,20 @@ type State = {
   radiusQuery: { value: number, label: string }
 }
 
-const radiusOptions = [
+const radiusOptions: NonEmptyArray<{ value: number, label: string}> = new NonEmptyArray(
   { value: 5, label: "5 Km" },
-  { value: 15, label: "15 Km" },
-  { value: 25, label: "25 Km" },
-  { value: 40, label: "40 Km" },
-];
+  [
+    { value: 15, label: "15 Km" },
+    { value: 25, label: "25 Km" },
+    { value: 40, label: "40 Km" },
+  ]
+);
 
 export default class Search extends React.Component<{}, State> {
   state = { 
     searchQuery: '', searchInput: '',
     locationQuery: 'Milan', locationInput: 'Milan',
-    radiusQuery: radiusOptions[0]
+    radiusQuery: radiusOptions.head
   };
   
   goToDetails = (id: string) => {
@@ -103,15 +106,15 @@ export default class Search extends React.Component<{}, State> {
                       onChange={onRadiusChange}
                       label="Radius"
                       placeholder="Select radius"
-                      options={radiusOptions}
+                      options={radiusOptions.toArray()}
                     />
                   </View>
                 </View>
                 <View className="list" grow={1} wrap={true} vAlignContent="top">
                   {restaurants.map(
                     r => 
-                      <View onClick={() => this.goToDetails(r.id)}>
-                        <Panel className="business-card" type="floating" header={{title: r.name}} key={r.id}>
+                      <View key={r.id} onClick={() => this.goToDetails(r.id)}>
+                        <Panel className="business-card" type="floating" header={{title: r.name}}>
                           <View column>
                             <View>
                               <img src={`${r.image_url}`} />
