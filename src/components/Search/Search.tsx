@@ -75,8 +75,8 @@ class Search extends React.Component<InjectedIntlProps, State> {
               </View>
             ),
             ({ restaurants }, loading) => (
-              <View column hAlignContent="left" grow={1} className="search">
-                <View className="search-inputs" shrink={0} wrap={true} vAlignContent="center">
+              <View column hAlignContent="left" grow className="search">
+                <View className="search-inputs" shrink={false} wrap vAlignContent="center">
                   <Input
                     placeholder={intl.formatMessage({ id: 'Search.searchLabel' })}
                     value={this.state.searchQuery}
@@ -106,7 +106,7 @@ class Search extends React.Component<InjectedIntlProps, State> {
                     </View>
                   </View>
                 </View>
-                <View className="list" grow={1} wrap={true} vAlignContent="top">
+                <View className="list" grow wrap vAlignContent="top">
                   {restaurants.map(r => (
                     <View key={r.id} onClick={() => this.goToDetails(r.id)}>
                       <Panel className="business-card" type="floating" header={{ title: r.name }}>
