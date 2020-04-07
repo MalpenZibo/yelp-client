@@ -10,11 +10,7 @@ import './search.scss';
 
 type State = {
   searchQuery: string,
-  searchInput: string,
-
   locationQuery: string,
-  locationInput: string,
-
   radiusQuery: { value: number, label: string }
 }
 
@@ -41,23 +37,12 @@ class Search extends React.Component<InjectedIntlProps, State> {
   render() {
     const intl = this.props;
 
-    let searchDelay: ReturnType<typeof setTimeout>;
-    let locationDelay: ReturnType<typeof setTimeout>;
-
     const onSearchChange = (value: string) => {
-      this.setState({ searchInput: value });
-      clearTimeout(searchDelay)
-      searchDelay = setTimeout(() => {
-        this.setState({ searchQuery: this.state.searchInput });
-      }, 250);
+      this.setState({ searchQuery: value });
     };
 
     const onLocationChange = (value: string) => {
-      this.setState({ locationInput: value });
-      clearTimeout(locationDelay)
-      locationDelay = setTimeout(() => {
-        this.setState({ locationQuery: this.state.locationInput });
-      }, 250);
+      this.setState({ locationQuery: value });
     };
 
     const onRadiusChange = (value: { value: number, label: string }) => {
@@ -85,58 +70,66 @@ class Search extends React.Component<InjectedIntlProps, State> {
                 <h2><FormattedMessage id="Search.loadingError" /></h2>
               </View>
             ),
-            ({ restaurants }) => (
-              <View column hAlignContent="left" grow={1} className="search">
-                <View className="search-inputs" shrink={0} wrap={true} vAlignContent="center">
-                  <Input
-                    placeholder='Search'
-                    value={this.state.searchInput}
-                    onChange={onSearchChange}
-                  />
-                  <View className="location">
-                    <View column vAlignContent="center">
-                      <h5><FormattedMessage id="Search.locationLabel" /></h5>
-                      <Input
-                        placeholder='Location'
-                        value={this.state.locationInput}
-                        onChange={onLocationChange}
-                      />
-                    </View>
-                    <View column vAlignContent="center">
-                      <h5><FormattedMessage id="Search.radiusLabel" /></h5>
-                      <SingleDropdown
-                        value={this.state.radiusQuery}
-                        onChange={onRadiusChange}
-                        label="Radius"
-                        placeholder="Select radius"
-                        options={radiusOptions.toArray()}
-                      />
+            ({ restaurants }, loading) => 
+              loading ? 
+              (
+                <LoadingSpinner
+                  size={45}
+                  message={{ content: intl.intl.formatMessage({ id: "App.loading" })}}
+                />
+              )
+              :
+              (<View column hAlignContent="left" grow={1} className="search">
+                  <View className="search-inputs" shrink={0} wrap={true} vAlignContent="center">
+                    <Input
+                      placeholder='Search'
+                      value={this.state.searchQuery}
+                      onChange={onSearchChange}
+                    />
+                    <View className="location">
+                      <View column vAlignContent="center">
+                        <h5><FormattedMessage id="Search.locationLabel" /></h5>
+                        <Input
+                          placeholder='Location'
+                          value={this.state.locationQuery}
+                          onChange={onLocationChange}
+                        />
+                      </View>
+                      <View column vAlignContent="center">
+                        <h5><FormattedMessage id="Search.radiusLabel" /></h5>
+                        <SingleDropdown
+                          value={this.state.radiusQuery}
+                          onChange={onRadiusChange}
+                          label="Radius"
+                          placeholder="Select radius"
+                          options={radiusOptions.toArray()}
+                        />
+                      </View>
                     </View>
                   </View>
-                </View>
-                <View className="list" grow={1} wrap={true} vAlignContent="top">
-                  {restaurants.map(
-                    r => 
-                      <View key={r.id} onClick={() => this.goToDetails(r.id)}>
-                        <Panel className="business-card" type="floating" header={{title: r.name}}>
-                          <View column>
-                            <View>
-                              <img src={`${r.image_url}`} />
-                              <View className="review" column vAlignContent="top">
-                                <p>Rating: {r.rating}</p>
-                                <p>Review: {r.review_count}</p>
+                  <View className="list" grow={1} wrap={true} vAlignContent="top">
+                    {restaurants.map(
+                      r => 
+                        <View key={r.id} onClick={() => this.goToDetails(r.id)}>
+                          <Panel className="business-card" type="floating" header={{title: r.name}}>
+                            <View column>
+                              <View>
+                                <img src={`${r.image_url}`} />
+                                <View className="review" column vAlignContent="top">
+                                  <p>Rating: {r.rating}</p>
+                                  <p>Review: {r.review_count}</p>
+                                </View>
+                              </View>
+                              <View column>
+                                <p>Address: {r.location.display_address.join(' ')}</p>
                               </View>
                             </View>
-                            <View column>
-                              <p>Address: {r.location.display_address.join(' ')}</p>
-                            </View>
-                          </View>
-                        </Panel>
-                      </View>
-                  )}
+                          </Panel>
+                        </View>
+                    )}
+                  </View>
                 </View>
-              </View>
-            )
+              )
           )
         }
       />
