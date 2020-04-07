@@ -87,29 +87,31 @@ class Search extends React.Component<InjectedIntlProps, State> {
             ),
             ({ restaurants }) => (
               <View column hAlignContent="left" grow={1} className="search">
-                <View className="search-inputs">
+                <View className="search-inputs" shrink={0} wrap={true} vAlignContent="center">
                   <Input
                     placeholder='Search'
                     value={this.state.searchInput}
                     onChange={onSearchChange}
                   />
-                  <View vAlignContent="center">
-                    <h5><FormattedMessage id="Search.locationLabel" /></h5>
-                    <Input
-                      placeholder='Location'
-                      value={this.state.locationInput}
-                      onChange={onLocationChange}
-                    />
-                  </View>
-                  <View vAlignContent="center">
-                    <h5><FormattedMessage id="Search.radiusLabel" /></h5>
-                    <SingleDropdown
-                      value={this.state.radiusQuery}
-                      onChange={onRadiusChange}
-                      label="Radius"
-                      placeholder="Select radius"
-                      options={radiusOptions.toArray()}
-                    />
+                  <View className="location">
+                    <View column vAlignContent="center">
+                      <h5><FormattedMessage id="Search.locationLabel" /></h5>
+                      <Input
+                        placeholder='Location'
+                        value={this.state.locationInput}
+                        onChange={onLocationChange}
+                      />
+                    </View>
+                    <View column vAlignContent="center">
+                      <h5><FormattedMessage id="Search.radiusLabel" /></h5>
+                      <SingleDropdown
+                        value={this.state.radiusQuery}
+                        onChange={onRadiusChange}
+                        label="Radius"
+                        placeholder="Select radius"
+                        options={radiusOptions.toArray()}
+                      />
+                    </View>
                   </View>
                 </View>
                 <View className="list" grow={1} wrap={true} vAlignContent="top">
