@@ -3,7 +3,7 @@ import { doUpdateCurrentView } from '../../commands';
 import { WithQueries } from 'avenger/lib/react';
 import { restaurants } from '../../queries/queries';
 import { Panel, LoadingSpinner, View, Input, SingleDropdown } from '../Basic';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl';
 import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray'
 
 import './search.scss';
@@ -27,7 +27,7 @@ const radiusOptions: NonEmptyArray<{ value: number, label: string}> = new NonEmp
   ]
 );
 
-export default class Search extends React.Component<{}, State> {
+class Search extends React.Component<InjectedIntlProps, State> {
   state = { 
     searchQuery: '', searchInput: '',
     locationQuery: 'Milan', locationInput: 'Milan',
@@ -39,6 +39,8 @@ export default class Search extends React.Component<{}, State> {
   };
 
   render() {
+    const intl = this.props;
+
     let searchDelay: ReturnType<typeof setTimeout>;
     let locationDelay: ReturnType<typeof setTimeout>;
 
@@ -75,7 +77,7 @@ export default class Search extends React.Component<{}, State> {
             () => (
               <LoadingSpinner
                 size={45}
-                message={{ content: 'loading...'}}
+                message={{ content: intl.intl.formatMessage({ id: "App.loading" })}}
               />
             ),
             () => (
@@ -139,3 +141,5 @@ export default class Search extends React.Component<{}, State> {
     );
   }
 }
+
+export default injectIntl(Search);
