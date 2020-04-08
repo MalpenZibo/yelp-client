@@ -1,6 +1,9 @@
 @import '../../theme/variables.scss';
 
 .app {
+  width: 100%;
+  height: 100%;
+
   .header {
     z-index: 1;
     background: $ice;
@@ -10,13 +13,9 @@
     font-size: 14px;
     color: $darkGrey;
     font-weight: $bold;
-  
+
     > h1 {
       margin-right: 30px;
     }
-  }
-
-  .content {
-    padding: 20px;
   }
 }

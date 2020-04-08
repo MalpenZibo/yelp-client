@@ -21,7 +21,11 @@ const t = require('io-ts');
 
 module.exports = t.type(
   {
-    bundle: t.type({})
+    bundle: t.type({
+      apiEndpoint: t.string,
+      apiKey: t.string,
+      timeout: t.number
+    })
   },
   'Config'
 );
