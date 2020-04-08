@@ -6,6 +6,12 @@
     "Search.searchLabel": "Search",
     "Search.locationLabel": "Location",
     "Search.locationNeeded": "Location Needed",
-    "Search.radiusLabel": "Radius"
+    "Search.radiusLabel": "Radius",
+    "Business.Price": "Price",
+    "Business.Rating": "Rating",
+    "Business.Review": "Review",
+    "Business.Categories": "Categories",
+    "Business.Address": "Address",
+    "Business.Phone": "Phone"
   }
 }

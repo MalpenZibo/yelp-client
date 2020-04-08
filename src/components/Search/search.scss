@@ -1,3 +1,5 @@
+@import '../../theme/variables.scss';
+
 .search {
   margin-top: 10px;
 
@@ -42,6 +44,11 @@
         width: 250px;
         height: 222px;
         overflow: hidden;
+        cursor: pointer;
+
+        .panel.floating {
+          margin: 0px;
+        }
 
         img {
           display: block;
@@ -53,6 +60,13 @@
 
         .review {
           margin-left: 5px;
+        }
+
+        &:hover {
+          .panel-header-title {
+            text-decoration: underline;
+            color: $mediumBlue;
+          }
         }
       }
     }

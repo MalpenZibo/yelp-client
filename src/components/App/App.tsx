@@ -24,7 +24,7 @@ class App extends React.Component<typeof queries.Props> {
           {this.props.queries.fold(constNull, constNull, ({ currentView }) => {
             switch (currentView.view) {
               case 'detail':
-                return <Details />;
+                return <Details businessId={currentView.businessId} />;
               case 'search':
                 return <Search />;
             }

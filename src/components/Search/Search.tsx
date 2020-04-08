@@ -136,8 +136,12 @@ class Search extends React.Component<InjectedIntlProps, State> {
                 <View className="search-result" grow>
                   <View className="list" grow wrap vAlignContent="top">
                     {restaurants.map(r => (
-                      <View key={r.id} onClick={() => this.goToDetails(r.id)}>
-                        <Panel className="business-card" type="floating" header={{ title: r.name }}>
+                      <View
+                        className="business-card"
+                        key={r.id}
+                        onClick={() => this.goToDetails(r.id)}
+                      >
+                        <Panel type="floating" header={{ title: r.name }}>
                           <View column>
                             <View>
                               <img src={`${r.image_url}`} />

@@ -6,8 +6,17 @@ export type MenuViewType = 'search' | 'detail';
 
 export type CurrentView = { view: 'search' } | { view: 'detail'; businessId: string };
 
-export type Location = t.TypeOf<typeof Location>;
 export type Business = t.TypeOf<typeof Business>;
+export type Location = t.TypeOf<typeof Location>;
+export type Category = t.TypeOf<typeof Category>;
+
+export const Category = t.type(
+  {
+    alias: t.string,
+    title: t.string
+  },
+  'Category'
+);
 
 export const Location = t.type(
   {
@@ -31,7 +40,9 @@ export const Business = t.type(
     review_count: t.number,
     rating: t.number,
     display_phone: t.string,
-    location: Location
+    price: t.string,
+    location: Location,
+    categories: t.array(Category)
   },
   'Business'
 );
