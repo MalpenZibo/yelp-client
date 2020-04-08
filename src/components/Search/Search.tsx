@@ -2,15 +2,18 @@ import * as React from 'react';
 import { doUpdateCurrentView } from '../../commands';
 import { WithQueries } from 'avenger/lib/react';
 import { restaurants } from '../../queries/queries';
-import { Panel, LoadingSpinner, View, ConfirmationInput, SingleDropdown } from '../Basic';
+import { Panel, LoadingSpinner, View, SingleDropdown, Input } from '../Basic';
 import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl';
 import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
+import _ = require('lodash');
 
 import './search.scss';
 
 type State = {
   searchQuery: string;
+  searchInput: string;
   locationQuery: string;
+  locationInput: string;
   radiusQuery: { value: number; label: string };
 };
 
@@ -26,9 +29,17 @@ const radiusOptions: NonEmptyArray<{ value: number; label: string }> = new NonEm
 );
 
 class Search extends React.Component<InjectedIntlProps, State> {
+  constructor(props: InjectedIntlProps) {
+    super(props);
+
+    this.onSearchConfirm = _.debounce(this.onSearchConfirm, 500);
+    this.onLocationConfirm = _.debounce(this.onLocationConfirm, 500);
+  }
   state = {
     searchQuery: '',
+    searchInput: '',
     locationQuery: defaultLocation,
+    locationInput: defaultLocation,
     radiusQuery: radiusOptions.head
   };
 
@@ -36,20 +47,25 @@ class Search extends React.Component<InjectedIntlProps, State> {
     doUpdateCurrentView({ view: 'detail', businessId: id }).run();
   };
 
+  onSearchChange = (value: string) => {
+    this.setState({ searchInput: value });
+
+    this.onSearchConfirm(value);
+  };
+
   onSearchConfirm = (value: string) => {
     this.setState({ searchQuery: value });
   };
 
-  onSearchClear = () => {
-    this.setState({ searchQuery: '' });
+  onLocationChange = (value: string) => {
+    this.setState({ locationInput: value });
+    if (value.length > 0) {
+      this.onLocationConfirm(value);
+    }
   };
 
   onLocationConfirm = (value: string) => {
     this.setState({ locationQuery: value });
-  };
-
-  onLocationClear = () => {
-    this.setState({ locationQuery: defaultLocation });
   };
 
   onRadiusChange = (value: { value: number; label: string }) => {
@@ -62,26 +78,20 @@ class Search extends React.Component<InjectedIntlProps, State> {
     return (
       <View column hAlignContent="left" grow className="search">
         <View className="search-inputs" shrink={false} wrap vAlignContent="center">
-          <ConfirmationInput
+          <Input
             placeholder={intl.formatMessage({ id: 'Search.searchLabel' })}
-            initialValue=""
-            onConfirm={this.onSearchConfirm}
-            onClear={this.onSearchClear}
-            text={{ clear: 'X', toConfirm: undefined }}
-            icon={{ clear: undefined, toConfirm: undefined }}
+            value={this.state.searchInput}
+            onChange={this.onSearchChange}
           />
           <View className="location">
             <View column vAlignContent="center">
               <h5>
                 <FormattedMessage id="Search.locationLabel" />
               </h5>
-              <ConfirmationInput
-                placeholder={intl.formatMessage({ id: 'Search.locationLabel' })}
-                initialValue={defaultLocation}
-                onConfirm={this.onLocationConfirm}
-                onClear={this.onLocationClear}
-                text={{ clear: 'X', toConfirm: undefined }}
-                icon={{ clear: undefined, toConfirm: undefined }}
+              <Input
+                placeholder={intl.formatMessage({ id: 'Search.locationNeeded' })}
+                value={this.state.locationInput}
+                onChange={this.onLocationChange}
               />
             </View>
             <View column vAlignContent="center">

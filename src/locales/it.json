@@ -1,12 +1,11 @@
 {
-  "locales": [
-    "it"
-  ],
+  "locales": ["it"],
   "messages": {
     "App.loading": "loading...",
     "Search.loadingError": "there was a problem when fetching restaurants",
     "Search.searchLabel": "Search",
     "Search.locationLabel": "Location",
+    "Search.locationNeeded": "Location Needed",
     "Search.radiusLabel": "Radius"
   }
 }
