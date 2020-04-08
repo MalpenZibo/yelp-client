@@ -12,6 +12,17 @@
     "Business.Review": "Review",
     "Business.Categories": "Categories",
     "Business.Address": "Address",
-    "Business.Phone": "Phone"
+    "Business.Phone": "Phone",
+    "Business.Hours": "Hours",
+    "Business.Open": "OPEN",
+    "Business.Closed": "CLOSED",
+    "Business.Hour": "{day}: {from} - {to}",
+    "Day.monday": "Monday",
+    "Day.tuesday": "Tuesday",
+    "Day.wednesday": "Wednesday",
+    "Day.thursday": "Thursday",
+    "Day.friday": "Friday",
+    "Day.saturday": "Saturday",
+    "Day.sunday": "Sunday"
   }
 }

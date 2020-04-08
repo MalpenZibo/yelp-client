@@ -6,9 +6,25 @@ export type MenuViewType = 'search' | 'detail';
 
 export type CurrentView = { view: 'search' } | { view: 'detail'; businessId: string };
 
+export type Day = t.TypeOf<typeof Day>;
 export type Business = t.TypeOf<typeof Business>;
 export type Location = t.TypeOf<typeof Location>;
 export type Category = t.TypeOf<typeof Category>;
+export type Hour = t.TypeOf<typeof Hour>;
+export type OpenValue = t.TypeOf<typeof OpenValue>;
+
+export const Day = t.keyof(
+  {
+    0: null,
+    1: null,
+    2: null,
+    3: null,
+    4: null,
+    5: null,
+    6: null
+  },
+  'Day'
+);
 
 export const Category = t.type(
   {
@@ -16,6 +32,25 @@ export const Category = t.type(
     title: t.string
   },
   'Category'
+);
+
+export const OpenValue = t.type(
+  {
+    is_overnight: t.boolean,
+    start: t.string,
+    end: t.string,
+    day: t.number //Day
+  },
+  'OpenValue'
+);
+
+export const Hour = t.type(
+  {
+    open: t.array(OpenValue),
+    hours_type: t.string,
+    is_open_now: t.boolean
+  },
+  'Hour'
 );
 
 export const Location = t.type(
@@ -42,7 +77,8 @@ export const Business = t.type(
     display_phone: t.string,
     price: t.string,
     location: Location,
-    categories: t.array(Category)
+    categories: t.array(Category),
+    hours: optionFromNullable(t.array(Hour))
   },
   'Business'
 );

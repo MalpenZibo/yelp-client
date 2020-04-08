@@ -6,6 +6,8 @@ import { LoadingSpinner, Panel, Badge } from '../Basic';
 import { business } from '../../queries/queries';
 
 import './detail.scss';
+import { formatDay } from '../../util/localization';
+import { Day } from 'src/model';
 
 type Props = {
   businessId: string;
@@ -43,7 +45,7 @@ class Detail extends React.Component<Props> {
                       <h4>{intl.formatMessage({ id: 'Business.Categories' })}</h4>
                       <View>
                         {business.categories.map(c => (
-                          <Badge label={c.title} />
+                          <Badge key={c.alias} label={c.title} />
                         ))}
                       </View>
                       <p>
@@ -60,20 +62,59 @@ class Detail extends React.Component<Props> {
                           business.review_count
                         ].join(': ')}
                       </p>
+                      <p>
+                        {[
+                          intl.formatMessage({ id: 'Business.Address' }),
+                          business.location.display_address.join(' ')
+                        ].join(': ')}
+                      </p>
+                      <p>
+                        {[
+                          intl.formatMessage({ id: 'Business.Phone' }),
+                          business.display_phone
+                        ].join(': ')}
+                      </p>
                     </View>
                   </View>
                   <View column>
-                    <p>
-                      {[
-                        intl.formatMessage({ id: 'Business.Address' }),
-                        business.location.display_address.join(' ')
-                      ].join(': ')}
-                    </p>
-                    <p>
-                      {[intl.formatMessage({ id: 'Business.Phone' }), business.display_phone].join(
-                        ': '
-                      )}
-                    </p>
+                    <h4>{intl.formatMessage({ id: 'Business.Hours' })}</h4>
+                    {business.hours.fold<JSX.Element>(<p>No working hour</p>, someHours => (
+                      <View>
+                        {someHours.map((h, index) => (
+                          <View key={index} column>
+                            <Badge
+                              label={
+                                h.is_open_now
+                                  ? intl.formatMessage({ id: 'Business.Open' })
+                                  : intl.formatMessage({ id: 'Business.Closed' })
+                              }
+                            />
+                            <View column>
+                              {h.open.map(hv => (
+                                <View key={hv.day}>
+                                  {intl.formatMessage(
+                                    { id: 'Business.Hour' },
+                                    {
+                                      day: formatDay(intl, hv.day as Day),
+                                      from: intl.formatTime(
+                                        new Date(
+                                          `01/01/1970 ${hv.start.slice(0, 2)}:${hv.start.slice(2)}`
+                                        )
+                                      ),
+                                      to: intl.formatTime(
+                                        new Date(
+                                          `01/01/1970 ${hv.end.slice(0, 2)}:${hv.end.slice(2)}`
+                                        )
+                                      )
+                                    }
+                                  )}
+                                </View>
+                              ))}
+                            </View>
+                          </View>
+                        ))}
+                      </View>
+                    ))}
                   </View>
                 </View>
               </Panel>
