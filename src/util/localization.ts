@@ -1,7 +1,7 @@
 import { InjectedIntl } from 'react-intl';
 import { Day } from 'src/model';
 
-export function formatDay(intl: InjectedIntl, day: Day) {
+export function formatDay(intl: InjectedIntl, day: Day): string {
   switch (day) {
     case 0:
       return intl.formatMessage({ id: 'Day.monday' });

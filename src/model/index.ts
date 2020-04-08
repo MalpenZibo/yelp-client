@@ -13,16 +13,16 @@ export type Category = t.TypeOf<typeof Category>;
 export type Hour = t.TypeOf<typeof Hour>;
 export type OpenValue = t.TypeOf<typeof OpenValue>;
 
-export const Day = t.keyof(
-  {
-    0: null,
-    1: null,
-    2: null,
-    3: null,
-    4: null,
-    5: null,
-    6: null
-  },
+export const Day = t.union(
+  [
+    t.literal(0),
+    t.literal(1),
+    t.literal(2),
+    t.literal(3),
+    t.literal(4),
+    t.literal(5),
+    t.literal(6)
+  ],
   'Day'
 );
 
@@ -39,7 +39,7 @@ export const OpenValue = t.type(
     is_overnight: t.boolean,
     start: t.string,
     end: t.string,
-    day: t.number //Day
+    day: Day
   },
   'OpenValue'
 );

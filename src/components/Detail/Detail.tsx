@@ -4,10 +4,10 @@ import { InjectedIntlProps, injectIntl, FormattedMessage } from 'react-intl';
 import { WithQueries } from 'avenger/lib/react';
 import { LoadingSpinner, Panel, Badge } from '../Basic';
 import { business } from '../../queries/queries';
-
-import './detail.scss';
 import { formatDay } from '../../util/localization';
 import { Day } from 'src/model';
+
+import './detail.scss';
 
 type Props = {
   businessId: string;
@@ -43,7 +43,7 @@ class Detail extends React.Component<Props> {
                     <img src={`${business.image_url}`} />
                     <View className="review" column vAlignContent="top">
                       <h4>{intl.formatMessage({ id: 'Business.Categories' })}</h4>
-                      <View>
+                      <View wrap>
                         {business.categories.map(c => (
                           <Badge key={c.alias} label={c.title} />
                         ))}
@@ -89,9 +89,9 @@ class Detail extends React.Component<Props> {
                                   : intl.formatMessage({ id: 'Business.Closed' })
                               }
                             />
-                            <View column>
+                            <ul>
                               {h.open.map(hv => (
-                                <View key={hv.day}>
+                                <li key={hv.day}>
                                   {intl.formatMessage(
                                     { id: 'Business.Hour' },
                                     {
@@ -108,9 +108,9 @@ class Detail extends React.Component<Props> {
                                       )
                                     }
                                   )}
-                                </View>
+                                </li>
                               ))}
-                            </View>
+                            </ul>
                           </View>
                         ))}
                       </View>
