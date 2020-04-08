@@ -1,9 +1,13 @@
 .search {
-  position: relative;
-  margin-left: 10px;
   margin-top: 10px;
 
+  .error {
+    width: 100%;
+  }
+
   .search-inputs {
+    margin-left: 10px;
+
     > div {
       margin-bottom: 10px;
     }
@@ -24,27 +28,32 @@
     }
   }
 
-  .list {
+  .search-result {
+    position: relative;
     width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
 
-    .business-card {
-      margin: 10px;
-      width: 250px;
-      height: 222px;
-      overflow: hidden;
+    .list {
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
 
-      img {
-        display: block;
-        width: auto;
-        height: auto;
-        max-width: 150px;
-        max-height: 100px;
-      }
+      .business-card {
+        margin: 10px;
+        width: 250px;
+        height: 222px;
+        overflow: hidden;
 
-      .review {
-        margin-left: 5px;
+        img {
+          display: block;
+          width: auto;
+          height: auto;
+          max-width: 150px;
+          max-height: 100px;
+        }
+
+        .review {
+          margin-left: 5px;
+        }
       }
     }
   }

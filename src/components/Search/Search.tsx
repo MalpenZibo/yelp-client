@@ -9,12 +9,12 @@ import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
 import './search.scss';
 
 type State = {
-  searchInput: string;
   searchQuery: string;
-  locationInput: string;
   locationQuery: string;
   radiusQuery: { value: number; label: string };
 };
+
+const defaultLocation = 'Milan';
 
 const radiusOptions: NonEmptyArray<{ value: number; label: string }> = new NonEmptyArray(
   { value: 5, label: '5 Km' },
@@ -27,19 +27,13 @@ const radiusOptions: NonEmptyArray<{ value: number; label: string }> = new NonEm
 
 class Search extends React.Component<InjectedIntlProps, State> {
   state = {
-    searchInput: '',
     searchQuery: '',
-    locationInput: 'Milan',
-    locationQuery: 'Milan',
+    locationQuery: defaultLocation,
     radiusQuery: radiusOptions.head
   };
 
   goToDetails = (id: string) => {
     doUpdateCurrentView({ view: 'detail', businessId: id }).run();
-  };
-
-  onSearchChange = (value: string) => {
-    this.setState({ searchInput: value });
   };
 
   onSearchConfirm = (value: string) => {
@@ -50,16 +44,12 @@ class Search extends React.Component<InjectedIntlProps, State> {
     this.setState({ searchQuery: '' });
   };
 
-  onLocationChange = (value: string) => {
-    this.setState({ locationInput: value });
-  };
-
   onLocationConfirm = (value: string) => {
     this.setState({ locationQuery: value });
   };
 
   onLocationClear = () => {
-    this.setState({ locationQuery: '' });
+    this.setState({ locationQuery: defaultLocation });
   };
 
   onRadiusChange = (value: { value: number; label: string }) => {
@@ -70,102 +60,103 @@ class Search extends React.Component<InjectedIntlProps, State> {
     const intl = this.props.intl;
 
     return (
-      <WithQueries
-        queries={{ restaurants }}
-        params={{
-          restaurants: {
-            searchQuery: this.state.searchQuery,
-            locationQuery: this.state.locationQuery,
-            radiusQuery: this.state.radiusQuery.value
-          }
-        }}
-        render={queries =>
-          queries.fold(
-            () => (
-              <LoadingSpinner
-                size={45}
-                message={{ content: intl.formatMessage({ id: 'App.loading' }) }}
+      <View column hAlignContent="left" grow className="search">
+        <View className="search-inputs" shrink={false} wrap vAlignContent="center">
+          <ConfirmationInput
+            placeholder={intl.formatMessage({ id: 'Search.searchLabel' })}
+            initialValue=""
+            onConfirm={this.onSearchConfirm}
+            onClear={this.onSearchClear}
+            text={{ clear: 'X', toConfirm: undefined }}
+            icon={{ clear: undefined, toConfirm: undefined }}
+          />
+          <View className="location">
+            <View column vAlignContent="center">
+              <h5>
+                <FormattedMessage id="Search.locationLabel" />
+              </h5>
+              <ConfirmationInput
+                placeholder={intl.formatMessage({ id: 'Search.locationLabel' })}
+                initialValue={defaultLocation}
+                onConfirm={this.onLocationConfirm}
+                onClear={this.onLocationClear}
+                text={{ clear: 'X', toConfirm: undefined }}
+                icon={{ clear: undefined, toConfirm: undefined }}
               />
-            ),
-            () => (
-              <View hAlignContent="center" vAlignContent="center" grow={1}>
-                <h2>
-                  <FormattedMessage id="Search.loadingError" />
-                </h2>
-              </View>
-            ),
-            ({ restaurants }, loading) => (
-              <View column hAlignContent="left" grow className="search">
-                <View className="search-inputs" shrink={false} wrap vAlignContent="center">
-                  <ConfirmationInput
-                    placeholder={intl.formatMessage({ id: 'Search.searchLabel' })}
-                    initialValue={this.state.searchInput}
-                    onChange={this.onSearchChange}
-                    onConfirm={this.onSearchConfirm}
-                    onClear={this.onSearchClear}
-                    text={{ clear: 'X', toConfirm: undefined }}
-                    icon={{ clear: undefined, toConfirm: undefined }}
-                  />
-                  <View className="location">
-                    <View column vAlignContent="center">
-                      <h5>
-                        <FormattedMessage id="Search.locationLabel" />
-                      </h5>
-                      <ConfirmationInput
-                        placeholder={intl.formatMessage({ id: 'Search.locationLabel' })}
-                        initialValue={this.state.locationInput}
-                        onChange={this.onLocationChange}
-                        onConfirm={this.onLocationConfirm}
-                        onClear={this.onLocationClear}
-                        text={{ clear: 'X', toConfirm: undefined }}
-                        icon={{ clear: undefined, toConfirm: undefined }}
-                      />
-                    </View>
-                    <View column vAlignContent="center">
-                      <h5>
-                        <FormattedMessage id="Search.radiusLabel" />
-                      </h5>
-                      <SingleDropdown
-                        value={this.state.radiusQuery}
-                        onChange={this.onRadiusChange}
-                        label={intl.formatMessage({ id: 'Search.radiusLabel' })}
-                        options={radiusOptions.toArray()}
-                      />
-                    </View>
-                  </View>
+            </View>
+            <View column vAlignContent="center">
+              <h5>
+                <FormattedMessage id="Search.radiusLabel" />
+              </h5>
+              <SingleDropdown
+                value={this.state.radiusQuery}
+                onChange={this.onRadiusChange}
+                label={intl.formatMessage({ id: 'Search.radiusLabel' })}
+                options={radiusOptions.toArray()}
+              />
+            </View>
+          </View>
+        </View>
+
+        <WithQueries
+          queries={{ restaurants }}
+          params={{
+            restaurants: {
+              searchQuery: this.state.searchQuery,
+              locationQuery: this.state.locationQuery,
+              radiusQuery: this.state.radiusQuery.value
+            }
+          }}
+          render={queries =>
+            queries.fold(
+              () => (
+                <LoadingSpinner
+                  size={45}
+                  message={{ content: intl.formatMessage({ id: 'App.loading' }) }}
+                />
+              ),
+              () => (
+                <View className="error" hAlignContent="center" vAlignContent="center" grow>
+                  <h2>
+                    <FormattedMessage id="Search.loadingError" />
+                  </h2>
                 </View>
-                <View className="list" grow wrap vAlignContent="top">
-                  {restaurants.map(r => (
-                    <View key={r.id} onClick={() => this.goToDetails(r.id)}>
-                      <Panel className="business-card" type="floating" header={{ title: r.name }}>
-                        <View column>
-                          <View>
-                            <img src={`${r.image_url}`} />
-                            <View className="review" column vAlignContent="top">
-                              <p>Rating: {r.rating}</p>
-                              <p>Review: {r.review_count}</p>
+              ),
+              ({ restaurants }, loading) => (
+                <View className="search-result" grow>
+                  <View className="list" grow wrap vAlignContent="top">
+                    {restaurants.map(r => (
+                      <View key={r.id} onClick={() => this.goToDetails(r.id)}>
+                        <Panel className="business-card" type="floating" header={{ title: r.name }}>
+                          <View column>
+                            <View>
+                              <img src={`${r.image_url}`} />
+                              <View className="review" column vAlignContent="top">
+                                <p>Rating: {r.rating}</p>
+                                <p>Review: {r.review_count}</p>
+                              </View>
+                            </View>
+                            <View column>
+                              <p>Address: {r.location.display_address.join(' ')}</p>
                             </View>
                           </View>
-                          <View column>
-                            <p>Address: {r.location.display_address.join(' ')}</p>
-                          </View>
-                        </View>
-                      </Panel>
-                    </View>
-                  ))}
-                </View>
+                        </Panel>
+                      </View>
+                    ))}
+                  </View>
 
-                {loading ? (
-                  <LoadingSpinner
-                    size={45}
-                    message={{ content: intl.formatMessage({ id: 'App.loading' }) }}
-                  />
-                ) : null}
-              </View>
+                  {loading ? (
+                    <LoadingSpinner
+                      size={45}
+                      message={{ content: intl.formatMessage({ id: 'App.loading' }) }}
+                    />
+                  ) : null}
+                </View>
+              )
             )
-          )
-        }
-      />
+          }
+        />
+      </View>
     );
   }
 }
