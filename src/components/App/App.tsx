@@ -26,7 +26,13 @@ class App extends React.Component<typeof queries.Props> {
               case 'detail':
                 return <Details businessId={currentView.businessId} />;
               case 'search':
-                return <Search />;
+                return (
+                  <Search
+                    term={currentView.term}
+                    location={currentView.location}
+                    radius={currentView.radius}
+                  />
+                );
             }
           })}
         </View>

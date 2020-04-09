@@ -1,10 +1,13 @@
 import * as t from 'io-ts';
 import { optionFromNullable } from 'io-ts-types/lib/optionFromNullable';
 import { HistoryLocation } from 'avenger/lib/browser';
+import { Option, some, none } from 'fp-ts/lib/Option';
 
 export type MenuViewType = 'search' | 'detail';
 
-export type CurrentView = { view: 'search' } | { view: 'detail'; businessId: string };
+export type CurrentView =
+  | { view: 'search'; term: Option<string>; location: Option<string>; radius: Option<number> }
+  | { view: 'detail'; businessId: string };
 
 export type Day = t.TypeOf<typeof Day>;
 export type Business = t.TypeOf<typeof Business>;
@@ -75,7 +78,7 @@ export const Business = t.type(
     review_count: t.number,
     rating: t.number,
     display_phone: t.string,
-    price: t.string,
+    price: optionFromNullable(t.string),
     location: Location,
     categories: t.array(Category),
     hours: optionFromNullable(t.array(Hour))
@@ -92,15 +95,37 @@ export function locationToView(location: HistoryLocation): CurrentView {
             businessId: location.search.businessId
           }
         : {
-            view: 'search'
+            view: 'search',
+            term: none,
+            location: none,
+            radius: none
           };
+    case '/search':
+      return {
+        view: 'search',
+        term: location.search.term ? some(location.search.term) : none,
+        location: location.search.location ? some(location.search.location) : none,
+        radius: t.number.decode(location.search.radius).fold(
+          _ => none,
+          num => some(num)
+        )
+      };
     default:
-      return { view: 'search' };
+      return { view: 'search', term: none, location: none, radius: none };
   }
 }
 
 export function viewToLocation(view: CurrentView): HistoryLocation {
   switch (view.view) {
+    case 'search':
+      return {
+        pathname: 'search',
+        search: {
+          term: view.term.getOrElse(''),
+          location: view.location.getOrElse(''),
+          radius: view.radius.fold('', radius => radius.toString())
+        }
+      };
     case 'detail':
       return {
         pathname: '/detail',

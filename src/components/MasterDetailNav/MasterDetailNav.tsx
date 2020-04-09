@@ -5,6 +5,7 @@ import { currentView } from '../../queries';
 import { doUpdateCurrentView } from '../../commands';
 import { constFalse } from 'fp-ts/lib/function';
 import { MenuViewType } from '../../model';
+import { none } from 'fp-ts/lib/Option';
 
 import './master-detail-nav.scss';
 
@@ -15,7 +16,7 @@ const detail: OptionType = { viewType: 'detail', label: 'Detail' };
 
 export default class MasterDetailNav extends React.Component {
   goToMaster = () => {
-    doUpdateCurrentView({ view: 'search' }).run();
+    doUpdateCurrentView({ view: 'search', term: none, location: none, radius: none }).run();
   };
 
   render() {
