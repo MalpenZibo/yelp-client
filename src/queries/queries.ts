@@ -1,4 +1,4 @@
-import { expire, queryShallow } from 'avenger';
+import { expire, queryShallow, queryStrict } from 'avenger';
 import { getCurrentView } from 'avenger/lib/browser';
 import * as API from '../API';
 import { locationToView } from '../model';
@@ -6,7 +6,9 @@ import { locationToView } from '../model';
 export const currentView = getCurrentView(locationToView);
 
 export const restaurants = queryShallow(
-  (parms: { searchQuery: string; locationQuery: string; radiusQuery: number }) =>
-    API.getRestaurants(parms.searchQuery, parms.locationQuery, parms.radiusQuery),
+  (params: { searchQuery: string; locationQuery: string; radiusQuery: number }) =>
+    API.getRestaurants(params.searchQuery, params.locationQuery, params.radiusQuery),
   expire(10000)
 );
+
+export const business = queryStrict(API.getBusinessDetails, expire(10000));

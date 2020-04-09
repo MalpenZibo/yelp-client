@@ -41,3 +41,25 @@ export const getRestaurants = (
     )
   );
 };
+
+export const getBusinessDetails = (businessId: string): TaskEither<unknown, Business> => {
+  return tryCatch(
+    () =>
+      axios({
+        method: 'get',
+        url: `${config.apiEndpoint}/businesses/${businessId}`,
+        params: {},
+        data: {},
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${config.apiKey}`,
+          Pragma: 'no-cache',
+          'Cache-Control': 'no-cache, no-store'
+        },
+        timeout: config.timeout
+      }),
+    identity
+  ).chain(res =>
+    fromEither(Business.decode(res.data).mapLeft(err => console.log(failure(err).join(' - '))))
+  );
+};
