@@ -146,12 +146,21 @@ class Search extends React.Component<InjectedIntlProps, State> {
                             <View>
                               <img src={`${r.image_url}`} />
                               <View className="review" column vAlignContent="top">
-                                <p>Rating: {r.rating}</p>
-                                <p>Review: {r.review_count}</p>
+                                <FormattedMessage
+                                  id="Search.Rating"
+                                  values={{ rating: r.rating }}
+                                />
+                                <FormattedMessage
+                                  id="Search.Review"
+                                  values={{ review: r.review_count }}
+                                />
                               </View>
                             </View>
                             <View column>
-                              <p>Address: {r.location.display_address.join(' ')}</p>
+                              <FormattedMessage
+                                id="Search.Address"
+                                values={{ address: r.location.display_address.join(' ') }}
+                              />
                             </View>
                           </View>
                         </Panel>

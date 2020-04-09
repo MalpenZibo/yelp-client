@@ -5,7 +5,7 @@ import { WithQueries } from 'avenger/lib/react';
 import { LoadingSpinner, Panel, Badge } from '../Basic';
 import { business } from '../../queries/queries';
 import { formatDay } from '../../util/localization';
-import { Day } from 'src/model';
+import { Day, Business } from 'src/model';
 
 import './detail.scss';
 
@@ -14,6 +14,48 @@ type Props = {
 } & InjectedIntlProps;
 
 class Detail extends React.Component<Props> {
+  hours = (business: Business): JSX.Element => {
+    const intl = this.props.intl;
+    return business.hours.fold(<FormattedMessage id="Business.NoHours" />, someHours => (
+      <View column>
+        <h4>
+          <FormattedMessage id="Business.Hours" />
+        </h4>
+        <View>
+          {someHours.map((h, index) => (
+            <View key={index} column>
+              <Badge
+                label={
+                  h.is_open_now
+                    ? intl.formatMessage({ id: 'Business.Open' })
+                    : intl.formatMessage({ id: 'Business.Closed' })
+                }
+              />
+              <ul>
+                {h.open.map(hv => (
+                  <li key={hv.day}>
+                    <FormattedMessage
+                      id="Business.Hour"
+                      values={{
+                        day: formatDay(intl, hv.day as Day),
+                        from: intl.formatTime(
+                          new Date(`01/01/1970 ${hv.start.slice(0, 2)}:${hv.start.slice(2)}`)
+                        ),
+                        to: intl.formatTime(
+                          new Date(`01/01/1970 ${hv.end.slice(0, 2)}:${hv.end.slice(2)}`)
+                        )
+                      }}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </View>
+          ))}
+        </View>
+      </View>
+    ));
+  };
+
   render() {
     const intl = this.props.intl;
 
@@ -32,7 +74,7 @@ class Detail extends React.Component<Props> {
             () => (
               <View className="error" hAlignContent="center" vAlignContent="center" grow>
                 <h2>
-                  <FormattedMessage id="Search.loadingError" />
+                  <FormattedMessage id="Business.loadingError" />
                 </h2>
               </View>
             ),
@@ -42,80 +84,34 @@ class Detail extends React.Component<Props> {
                   <View>
                     <img src={`${business.image_url}`} />
                     <View className="review" column vAlignContent="top">
-                      <h4>{intl.formatMessage({ id: 'Business.Categories' })}</h4>
+                      <h4>
+                        <FormattedMessage id="Business.Categories" />
+                      </h4>
                       <View wrap>
                         {business.categories.map(c => (
                           <Badge key={c.alias} label={c.title} />
                         ))}
                       </View>
-                      <p>
-                        {[intl.formatMessage({ id: 'Business.Price' }), business.price].join(': ')}
-                      </p>
-                      <p>
-                        {[intl.formatMessage({ id: 'Business.Rating' }), business.rating].join(
-                          ': '
-                        )}
-                      </p>
-                      <p>
-                        {[
-                          intl.formatMessage({ id: 'Business.Review' }),
-                          business.review_count
-                        ].join(': ')}
-                      </p>
-                      <p>
-                        {[
-                          intl.formatMessage({ id: 'Business.Address' }),
-                          business.location.display_address.join(' ')
-                        ].join(': ')}
-                      </p>
-                      <p>
-                        {[
-                          intl.formatMessage({ id: 'Business.Phone' }),
-                          business.display_phone
-                        ].join(': ')}
-                      </p>
+                      <h4>
+                        <FormattedMessage id="Business.Info" />
+                      </h4>
+                      <FormattedMessage id="Business.Price" values={{ price: business.price }} />
+                      <FormattedMessage id="Business.Rating" values={{ rating: business.rating }} />
+                      <FormattedMessage
+                        id="Business.Review"
+                        values={{ review: business.review_count }}
+                      />
+                      <FormattedMessage
+                        id="Business.Address"
+                        values={{ address: business.location.display_address.join(' ') }}
+                      />
+                      <FormattedMessage
+                        id="Business.Phone"
+                        values={{ phone: business.display_phone }}
+                      />
                     </View>
                   </View>
-                  <View column>
-                    <h4>{intl.formatMessage({ id: 'Business.Hours' })}</h4>
-                    {business.hours.fold<JSX.Element>(<p>No working hour</p>, someHours => (
-                      <View>
-                        {someHours.map((h, index) => (
-                          <View key={index} column>
-                            <Badge
-                              label={
-                                h.is_open_now
-                                  ? intl.formatMessage({ id: 'Business.Open' })
-                                  : intl.formatMessage({ id: 'Business.Closed' })
-                              }
-                            />
-                            <ul>
-                              {h.open.map(hv => (
-                                <li key={hv.day}>
-                                  {intl.formatMessage(
-                                    { id: 'Business.Hour' },
-                                    {
-                                      day: formatDay(intl, hv.day as Day),
-                                      from: intl.formatTime(
-                                        new Date(
-                                          `01/01/1970 ${hv.start.slice(0, 2)}:${hv.start.slice(2)}`
-                                        )
-                                      ),
-                                      to: intl.formatTime(
-                                        new Date(
-                                          `01/01/1970 ${hv.end.slice(0, 2)}:${hv.end.slice(2)}`
-                                        )
-                                      )
-                                    }
-                                  )}
-                                </li>
-                              ))}
-                            </ul>
-                          </View>
-                        ))}
-                      </View>
-                    ))}
-                  </View>
+                  {this.hours(business)}
                 </View>
               </Panel>
             )
