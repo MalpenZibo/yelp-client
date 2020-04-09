@@ -14,6 +14,11 @@ type Props = {
   term: Option<string>;
   location: Option<string>;
   radius: Option<number>;
+  setFilter: (value: {
+    term: Option<string>;
+    location: Option<string>;
+    radius: Option<number>;
+  }) => void;
 } & InjectedIntlProps;
 
 type State = {
@@ -65,12 +70,11 @@ class Search extends React.Component<Props, State> {
   onTermConfirm = (value: string) => {
     this.setState({ termQuery: value });
 
-    doUpdateCurrentView({
-      view: 'search',
+    this.props.setFilter({
       term: some(value),
       location: some(this.state.locationQuery),
       radius: some(this.state.radiusQuery.value)
-    }).run();
+    });
   };
 
   onLocationChange = (value: string) => {
@@ -83,23 +87,21 @@ class Search extends React.Component<Props, State> {
   onLocationConfirm = (value: string) => {
     this.setState({ locationQuery: value });
 
-    doUpdateCurrentView({
-      view: 'search',
+    this.props.setFilter({
       term: some(this.state.termQuery),
       location: some(value),
       radius: some(this.state.radiusQuery.value)
-    }).run();
+    });
   };
 
   onRadiusChange = (value: { value: number; label: string }) => {
     this.setState({ radiusQuery: value });
 
-    doUpdateCurrentView({
-      view: 'search',
+    this.props.setFilter({
       term: some(this.state.termQuery),
       location: some(this.state.locationQuery),
       radius: some(value.value)
-    }).run();
+    });
   };
 
   render() {
