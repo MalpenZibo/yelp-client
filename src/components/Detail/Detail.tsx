@@ -62,7 +62,7 @@ class Detail extends React.Component<Props> {
     return (
       <WithQueries
         queries={{ business }}
-        params={{ business: { businessId: this.props.businessId } }}
+        params={{ business: this.props.businessId }}
         render={queries =>
           queries.fold(
             () => (
