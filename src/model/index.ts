@@ -1,5 +1,6 @@
 import * as t from 'io-ts';
 import { optionFromNullable } from 'io-ts-types/lib/optionFromNullable';
+import { IntFromString } from 'io-ts-types/lib/IntFromString';
 import { HistoryLocation } from 'avenger/lib/browser';
 import { Option, some, none } from 'fp-ts/lib/Option';
 
@@ -105,9 +106,9 @@ export function locationToView(location: HistoryLocation): CurrentView {
         view: 'search',
         term: location.search.term ? some(location.search.term) : none,
         location: location.search.location ? some(location.search.location) : none,
-        radius: t.number.decode(location.search.radius).fold(
+        radius: IntFromString.decode(location.search.radius).fold(
           _ => none,
-          num => some(num)
+          value => some(value.valueOf())
         )
       };
     default:
