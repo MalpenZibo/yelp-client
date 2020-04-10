@@ -6,55 +6,70 @@ import { Panel, LoadingSpinner, View, SingleDropdown, Input } from '../Basic';
 import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl';
 import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
 import _ = require('lodash');
+import { some } from 'fp-ts/lib/Option';
 
 import './search.scss';
+import { SearchFilters, RadiusValue } from 'src/model';
+
+type Props = {
+  filters: SearchFilters;
+  setFilter: (filters: SearchFilters) => void;
+} & InjectedIntlProps;
 
 type State = {
-  searchQuery: string;
-  searchInput: string;
+  termQuery: string;
+  termInput: string;
   locationQuery: string;
   locationInput: string;
-  radiusQuery: { value: number; label: string };
+  radiusQuery: { value: RadiusValue; label: string };
 };
 
 const defaultLocation = 'Milan';
 
-const radiusOptions: NonEmptyArray<{ value: number; label: string }> = new NonEmptyArray(
-  { value: 5, label: '5 Km' },
-  [
-    { value: 15, label: '15 Km' },
-    { value: 25, label: '25 Km' },
-    { value: 40, label: '40 Km' }
-  ]
-);
+const radiusOptions: NonEmptyArray<{ value: RadiusValue; label: string }> = new NonEmptyArray<{
+  value: RadiusValue;
+  label: string;
+}>({ value: 5, label: '5 Km' }, [
+  { value: 15, label: '15 Km' },
+  { value: 25, label: '25 Km' },
+  { value: 40, label: '40 Km' }
+]);
 
-class Search extends React.Component<InjectedIntlProps, State> {
-  constructor(props: InjectedIntlProps) {
+class Search extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
-    this.onSearchConfirm = _.debounce(this.onSearchConfirm, 500);
+    this.onTermConfirm = _.debounce(this.onTermConfirm, 500);
     this.onLocationConfirm = _.debounce(this.onLocationConfirm, 500);
   }
   state = {
-    searchQuery: '',
-    searchInput: '',
-    locationQuery: defaultLocation,
-    locationInput: defaultLocation,
-    radiusQuery: radiusOptions.head
+    termQuery: this.props.filters.term.getOrElse(''),
+    termInput: this.props.filters.term.getOrElse(''),
+    locationQuery: this.props.filters.location.getOrElse(defaultLocation),
+    locationInput: this.props.filters.location.getOrElse(defaultLocation),
+    radiusQuery: radiusOptions
+      .findFirst(ro => ro.value == this.props.filters.radius.getOrElse(radiusOptions.head.value))
+      .getOrElse(radiusOptions.head)
   };
 
   goToDetails = (id: string) => {
     doUpdateCurrentView({ view: 'detail', businessId: id }).run();
   };
 
-  onSearchChange = (value: string) => {
-    this.setState({ searchInput: value });
+  onTermChange = (value: string) => {
+    this.setState({ termInput: value });
 
-    this.onSearchConfirm(value);
+    this.onTermConfirm(value);
   };
 
-  onSearchConfirm = (value: string) => {
-    this.setState({ searchQuery: value });
+  onTermConfirm = (value: string) => {
+    this.setState({ termQuery: value });
+
+    this.props.setFilter({
+      term: some(value),
+      location: some(this.state.locationQuery),
+      radius: some(this.state.radiusQuery.value)
+    });
   };
 
   onLocationChange = (value: string) => {
@@ -66,10 +81,22 @@ class Search extends React.Component<InjectedIntlProps, State> {
 
   onLocationConfirm = (value: string) => {
     this.setState({ locationQuery: value });
+
+    this.props.setFilter({
+      term: some(this.state.termQuery),
+      location: some(value),
+      radius: some(this.state.radiusQuery.value)
+    });
   };
 
-  onRadiusChange = (value: { value: number; label: string }) => {
+  onRadiusChange = (value: { value: RadiusValue; label: string }) => {
     this.setState({ radiusQuery: value });
+
+    this.props.setFilter({
+      term: some(this.state.termQuery),
+      location: some(this.state.locationQuery),
+      radius: some(value.value)
+    });
   };
 
   render() {
@@ -79,9 +106,9 @@ class Search extends React.Component<InjectedIntlProps, State> {
       <View column hAlignContent="left" grow className="search">
         <View className="search-inputs" shrink={false} wrap vAlignContent="center">
           <Input
-            placeholder={intl.formatMessage({ id: 'Search.searchLabel' })}
-            value={this.state.searchInput}
-            onChange={this.onSearchChange}
+            placeholder={intl.formatMessage({ id: 'Search.termLabel' })}
+            value={this.state.termInput}
+            onChange={this.onTermChange}
           />
           <View className="location">
             <View column vAlignContent="center">
@@ -112,7 +139,7 @@ class Search extends React.Component<InjectedIntlProps, State> {
           queries={{ restaurants }}
           params={{
             restaurants: {
-              searchQuery: this.state.searchQuery,
+              searchQuery: this.state.termQuery,
               locationQuery: this.state.locationQuery,
               radiusQuery: this.state.radiusQuery.value
             }

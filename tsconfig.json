@@ -2,7 +2,8 @@
   "extends": "./node_modules/scriptoni/lib/scripts/webpack/tsconfig.json",
   "compilerOptions": {
     "lib": ["es2018", "dom"],
-    "baseUrl": "."
+    "baseUrl": ".",
+    "sourceMap": true
   },
   "include": ["src/**/*", "typings"]
 }

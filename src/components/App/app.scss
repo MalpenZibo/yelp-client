@@ -1,21 +1,4 @@
-@import '../../theme/variables.scss';
-
 .app {
   width: 100%;
   height: 100%;
-
-  .header {
-    z-index: 1;
-    background: $ice;
-    width: 100%;
-    padding: 10px;
-    box-shadow: $black 0 -2px 10px -2px;
-    font-size: 14px;
-    color: $darkGrey;
-    font-weight: $bold;
-
-    > h1 {
-      margin-right: 30px;
-    }
-  }
 }

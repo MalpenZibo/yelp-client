@@ -95,7 +95,10 @@ class Detail extends React.Component<Props> {
                       <h4>
                         <FormattedMessage id="Business.Info" />
                       </h4>
-                      <FormattedMessage id="Business.Price" values={{ price: business.price }} />
+                      <FormattedMessage
+                        id="Business.Price"
+                        values={{ price: business.price.getOrElse('') }}
+                      />
                       <FormattedMessage id="Business.Rating" values={{ rating: business.rating }} />
                       <FormattedMessage
                         id="Business.Review"

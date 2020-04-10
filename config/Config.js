@@ -25,7 +25,8 @@ module.exports = t.type(
       apiEndpoint: t.string,
       apiKey: t.string,
       timeout: t.number
-    })
+    }),
+    devTool: t.string
   },
   'Config'
 );
