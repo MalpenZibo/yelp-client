@@ -6,19 +6,14 @@ import { Panel, LoadingSpinner, View, SingleDropdown, Input } from '../Basic';
 import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl';
 import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
 import _ = require('lodash');
-import { Option, some } from 'fp-ts/lib/Option';
+import { some } from 'fp-ts/lib/Option';
 
 import './search.scss';
+import { SearchFilters } from 'src/model';
 
 type Props = {
-  term: Option<string>;
-  location: Option<string>;
-  radius: Option<number>;
-  setFilter: (value: {
-    term: Option<string>;
-    location: Option<string>;
-    radius: Option<number>;
-  }) => void;
+  filters: SearchFilters;
+  setFilter: (filters: SearchFilters) => void;
 } & InjectedIntlProps;
 
 type State = {
@@ -48,12 +43,12 @@ class Search extends React.Component<Props, State> {
     this.onLocationConfirm = _.debounce(this.onLocationConfirm, 500);
   }
   state = {
-    termQuery: this.props.term.getOrElse(''),
-    termInput: this.props.term.getOrElse(''),
-    locationQuery: this.props.location.getOrElse(defaultLocation),
-    locationInput: this.props.location.getOrElse(defaultLocation),
+    termQuery: this.props.filters.term.getOrElse(''),
+    termInput: this.props.filters.term.getOrElse(''),
+    locationQuery: this.props.filters.location.getOrElse(defaultLocation),
+    locationInput: this.props.filters.location.getOrElse(defaultLocation),
     radiusQuery: radiusOptions
-      .findFirst(ro => ro.value == this.props.radius.getOrElse(radiusOptions.head.value))
+      .findFirst(ro => ro.value == this.props.filters.radius.getOrElse(radiusOptions.head.value))
       .getOrElse(radiusOptions.head)
   };
 

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import View from '../Basic/View';
 import { doUpdateCurrentView } from '../../commands';
-import { MenuViewType, CurrentView } from '../../model';
-import { Option, none } from 'fp-ts/lib/Option';
+import { MenuViewType, CurrentView, SearchFilters } from '../../model';
+import { none } from 'fp-ts/lib/Option';
 
 import './master-detail-nav.scss';
 import Search from '../Search';
@@ -18,39 +18,27 @@ type Props = {
 };
 
 type State = {
-  term: Option<string>;
-  location: Option<string>;
-  radius: Option<number>;
+  filters: SearchFilters;
 };
 
 export default class MasterDetailNav extends React.Component<Props, State> {
   state = {
-    term: none,
-    location: none,
-    radius: none
+    filters: { term: none, location: none, radius: none }
   };
 
   goToMaster = () => {
     doUpdateCurrentView({
       view: 'search',
-      term: this.state.term,
-      location: this.state.location,
-      radius: this.state.radius
+      ...this.state.filters
     }).run();
   };
 
-  setMasterFilter = (value: {
-    term: Option<string>;
-    location: Option<string>;
-    radius: Option<number>;
-  }) => {
-    this.setState({ ...value });
+  setMasterFilter = (filters: SearchFilters) => {
+    this.setState({ filters: filters });
 
     doUpdateCurrentView({
       view: 'search',
-      term: value.term,
-      location: value.location,
-      radius: value.radius
+      ...filters
     }).run();
   };
 
@@ -74,9 +62,11 @@ export default class MasterDetailNav extends React.Component<Props, State> {
       case 'search':
         return (
           <Search
-            term={currentView.term}
-            location={currentView.location}
-            radius={currentView.radius}
+            filters={{
+              term: currentView.term,
+              location: currentView.location,
+              radius: currentView.radius
+            }}
             setFilter={this.setMasterFilter}
           />
         );
