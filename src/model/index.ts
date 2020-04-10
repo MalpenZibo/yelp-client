@@ -118,15 +118,12 @@ export function locationToView(location: HistoryLocation): CurrentView {
         view: 'search',
         term: fromNullable(location.search.term),
         location: fromNullable(location.search.location),
-        radius: RadiusValue.decode(
-          IntFromString.decode(location.search.radius).fold(
-            _ => 0,
-            value => value
+        radius: IntFromString.decode(location.search.radius)
+          .chain(RadiusValue.decode)
+          .fold(
+            _ => none,
+            value => some(value)
           )
-        ).fold(
-          _ => none,
-          value => some(value)
-        )
       };
     default:
       return { view: 'search', term: none, location: none, radius: none };
