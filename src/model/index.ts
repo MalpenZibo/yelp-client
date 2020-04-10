@@ -1,27 +1,33 @@
 import * as t from 'io-ts';
 import { optionFromNullable } from 'io-ts-types/lib/optionFromNullable';
-import { IntFromString } from 'io-ts-types/lib/IntFromString';
 import { HistoryLocation } from 'avenger/lib/browser';
 import { Option, some, none, fromNullable } from 'fp-ts/lib/Option';
+import { IntFromString } from 'io-ts-types/lib/IntFromString';
 
 export type MenuViewType = 'search' | 'detail';
 
 export type CurrentView =
-  | { view: 'search'; term: Option<string>; location: Option<string>; radius: Option<number> }
+  | { view: 'search'; term: Option<string>; location: Option<string>; radius: Option<RadiusValue> }
   | { view: 'detail'; businessId: string };
 
 export type SearchFilters = {
   term: Option<string>;
   location: Option<string>;
-  radius: Option<number>;
+  radius: Option<RadiusValue>;
 };
 
+export type RadiusValue = t.TypeOf<typeof RadiusValue>;
 export type Day = t.TypeOf<typeof Day>;
 export type Business = t.TypeOf<typeof Business>;
 export type Location = t.TypeOf<typeof Location>;
 export type Category = t.TypeOf<typeof Category>;
 export type Hour = t.TypeOf<typeof Hour>;
 export type OpenValue = t.TypeOf<typeof OpenValue>;
+
+export const RadiusValue = t.union(
+  [t.literal(5), t.literal(15), t.literal(25), t.literal(40)],
+  'RadiusValue'
+);
 
 export const Day = t.union(
   [
@@ -112,7 +118,12 @@ export function locationToView(location: HistoryLocation): CurrentView {
         view: 'search',
         term: fromNullable(location.search.term),
         location: fromNullable(location.search.location),
-        radius: IntFromString.decode(location.search.radius).fold(
+        radius: RadiusValue.decode(
+          IntFromString.decode(location.search.radius).fold(
+            _ => 0,
+            value => value
+          )
+        ).fold(
           _ => none,
           value => some(value)
         )

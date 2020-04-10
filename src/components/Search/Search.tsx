@@ -9,7 +9,7 @@ import _ = require('lodash');
 import { some } from 'fp-ts/lib/Option';
 
 import './search.scss';
-import { SearchFilters } from 'src/model';
+import { SearchFilters, RadiusValue } from 'src/model';
 
 type Props = {
   filters: SearchFilters;
@@ -21,19 +21,19 @@ type State = {
   termInput: string;
   locationQuery: string;
   locationInput: string;
-  radiusQuery: { value: number; label: string };
+  radiusQuery: { value: RadiusValue; label: string };
 };
 
 const defaultLocation = 'Milan';
 
-const radiusOptions: NonEmptyArray<{ value: number; label: string }> = new NonEmptyArray(
-  { value: 5, label: '5 Km' },
-  [
-    { value: 15, label: '15 Km' },
-    { value: 25, label: '25 Km' },
-    { value: 40, label: '40 Km' }
-  ]
-);
+const radiusOptions: NonEmptyArray<{ value: RadiusValue; label: string }> = new NonEmptyArray<{
+  value: RadiusValue;
+  label: string;
+}>({ value: 5, label: '5 Km' }, [
+  { value: 15, label: '15 Km' },
+  { value: 25, label: '25 Km' },
+  { value: 40, label: '40 Km' }
+]);
 
 class Search extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -89,7 +89,7 @@ class Search extends React.Component<Props, State> {
     });
   };
 
-  onRadiusChange = (value: { value: number; label: string }) => {
+  onRadiusChange = (value: { value: RadiusValue; label: string }) => {
     this.setState({ radiusQuery: value });
 
     this.props.setFilter({
