@@ -1,4 +1,4 @@
-import { expire, queryShallow, queryStrict, product } from 'avenger';
+import { expire, queryShallow, queryStrict } from 'avenger';
 import { getCurrentView } from 'avenger/lib/browser';
 import * as API from '../API';
 import { locationToView } from '../model';
@@ -14,5 +14,3 @@ export const restaurants = queryShallow(
 export const business = queryStrict(API.getBusinessDetails, expire(10000));
 
 export const reviews = queryStrict(API.getReviews, expire(10000));
-
-export const businessWithReviews = product({ business, reviews });

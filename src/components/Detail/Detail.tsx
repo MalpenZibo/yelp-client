@@ -3,7 +3,7 @@ import View from '../Basic/View';
 import { InjectedIntlProps, injectIntl, FormattedMessage } from 'react-intl';
 import { WithQueries } from 'avenger/lib/react';
 import { LoadingSpinner, Panel, Badge } from '../Basic';
-import { businessWithReviews } from '../../queries/queries';
+import { business, reviews } from '../../queries/queries';
 import { formatDay } from '../../util/localization';
 import { Day, Business, Review } from 'src/model';
 
@@ -88,9 +88,10 @@ class Detail extends React.Component<Props> {
 
     return (
       <WithQueries
-        queries={{ businessWithReviews }}
+        queries={{ business, reviews }}
         params={{
-          businessWithReviews: { business: this.props.businessId, reviews: this.props.businessId }
+          business: this.props.businessId,
+          reviews: this.props.businessId
         }}
         render={queries =>
           queries.fold(
@@ -107,10 +108,7 @@ class Detail extends React.Component<Props> {
                 </h2>
               </View>
             ),
-            ({ businessWithReviews }) => {
-              const business = businessWithReviews.business;
-              const reviews = businessWithReviews.reviews;
-
+            ({ business, reviews }) => {
               return (
                 <Panel className="detail" type="floating" header={{ title: business.name }}>
                   <View column grow>
