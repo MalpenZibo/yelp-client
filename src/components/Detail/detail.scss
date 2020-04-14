@@ -1,10 +1,13 @@
 .detail {
+  height: fit-content;
+  max-width: 1440px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+
   img {
     display: block;
-    width: auto;
-    height: auto;
-    max-width: 450px;
-    max-height: 450px;
+    max-width: 250px;
+    max-height: 250px;
     border-radius: 5px;
     margin: 15px;
   }
@@ -15,5 +18,21 @@
 
   .review {
     margin-left: 5px;
+  }
+
+  .hours-reviews {
+    justify-content: space-between;
+
+    .review-list {
+      .panel.expanded {
+        width: auto; /* FIX for strange Panel beavior */
+      }
+
+      .review-content {
+        span {
+          margin-bottom: 15px;
+        }
+      }
+    }
   }
 }

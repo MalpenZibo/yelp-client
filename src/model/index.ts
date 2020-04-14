@@ -23,6 +23,8 @@ export type Location = t.TypeOf<typeof Location>;
 export type Category = t.TypeOf<typeof Category>;
 export type Hour = t.TypeOf<typeof Hour>;
 export type OpenValue = t.TypeOf<typeof OpenValue>;
+export type User = t.TypeOf<typeof User>;
+export type Review = t.TypeOf<typeof Review>;
 
 export const RadiusValue = t.union(
   [t.literal(5), t.literal(15), t.literal(25), t.literal(40)],
@@ -97,6 +99,26 @@ export const Business = t.type(
     hours: optionFromNullable(t.array(Hour))
   },
   'Business'
+);
+
+export const User = t.type(
+  {
+    id: t.string,
+    name: t.string,
+    image_url: optionFromNullable(t.string)
+  },
+  'User'
+);
+
+export const Review = t.type(
+  {
+    id: t.string,
+    text: t.string,
+    rating: t.number,
+    time_created: t.string,
+    user: User
+  },
+  'Review'
 );
 
 export function locationToView(location: HistoryLocation): CurrentView {
