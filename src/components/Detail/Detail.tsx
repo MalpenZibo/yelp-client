@@ -23,7 +23,7 @@ class Detail extends React.Component<Props> {
         </h4>
         <View>
           {someHours.map((h, index) => (
-            <View key={index} column>
+            <View column key={index}>
               <Badge
                 label={
                   h.is_open_now
@@ -32,8 +32,8 @@ class Detail extends React.Component<Props> {
                 }
               />
               <ul>
-                {h.open.map(hv => (
-                  <li key={hv.day}>
+                {h.open.map((hv, index) => (
+                  <li key={index}>
                     <FormattedMessage
                       id="Business.hour"
                       values={{
