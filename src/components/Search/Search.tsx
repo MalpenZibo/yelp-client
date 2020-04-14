@@ -174,18 +174,18 @@ class Search extends React.Component<Props, State> {
                               <img src={`${r.image_url}`} />
                               <View className="review" column vAlignContent="top">
                                 <FormattedMessage
-                                  id="Search.Rating"
+                                  id="Search.rating"
                                   values={{ rating: r.rating }}
                                 />
                                 <FormattedMessage
-                                  id="Search.Review"
+                                  id="Search.review"
                                   values={{ review: r.review_count }}
                                 />
                               </View>
                             </View>
                             <View column>
                               <FormattedMessage
-                                id="Search.Address"
+                                id="Search.address"
                                 values={{ address: r.location.display_address.join(' ') }}
                               />
                             </View>

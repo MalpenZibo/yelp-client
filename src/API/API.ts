@@ -1,5 +1,5 @@
 import { TaskEither, tryCatch, fromEither } from 'fp-ts/lib/TaskEither';
-import { Business } from '../model';
+import { Business, Review } from '../model';
 import axios from 'axios';
 import * as config from '../config';
 import { identity } from 'fp-ts/lib/function';
@@ -61,5 +61,32 @@ export const getBusinessDetails = (businessId: string): TaskEither<unknown, Busi
     identity
   ).chain(res =>
     fromEither(Business.decode(res.data).mapLeft(err => console.log(failure(err).join(' - '))))
+  );
+};
+
+export const getReviews = (businessId: string): TaskEither<unknown, Array<Review>> => {
+  return tryCatch(
+    () =>
+      axios({
+        method: 'get',
+        url: `${config.apiEndpoint}/businesses/${businessId}/reviews`,
+        params: {},
+        data: {},
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${config.apiKey}`,
+          Pragma: 'no-cache',
+          'Cache-Control': 'no-cache, no-store'
+        },
+        timeout: config.timeout
+      }),
+    identity
+  ).chain(res =>
+    fromEither(
+      t
+        .array(Review)
+        .decode(res.data.reviews)
+        .mapLeft(err => console.log(failure(err).join(' - ')))
+    )
   );
 };
