@@ -56,23 +56,32 @@ class Detail extends React.Component<Props> {
     ));
   };
 
-  reviews = (reviews: Array<Review>): JSX.Element => (
-    <View column>
-      <h4>
-        <FormattedMessage id="Business.reviews" />
-      </h4>
-      <View>
-        {reviews.map(r => (
-          <Panel key={r.id} type="floating" header={{ title: r.user.name }}>
-            <View column>
-              <FormattedMessage id="Business.review.info" />
-              <p>{r.text}</p>
-            </View>
-          </Panel>
-        ))}
+  reviews = (reviews: Array<Review>): JSX.Element => {
+    const intl = this.props.intl;
+    return (
+      <View column>
+        <h4>
+          <FormattedMessage id="Business.reviews" />
+        </h4>
+        <View column className="review-list">
+          {reviews.map(r => (
+            <Panel key={r.id} type="floating" header={{ title: r.user.name }}>
+              <View column className="review-content">
+                <FormattedMessage
+                  id="Business.review.info"
+                  values={{
+                    rating: r.rating,
+                    created: intl.formatDate(r.time_created)
+                  }}
+                />
+                <View>{r.text}</View>
+              </View>
+            </Panel>
+          ))}
+        </View>
       </View>
-    </View>
-  );
+    );
+  };
 
   render() {
     const intl = this.props.intl;
@@ -104,8 +113,8 @@ class Detail extends React.Component<Props> {
 
               return (
                 <Panel className="detail" type="floating" header={{ title: business.name }}>
-                  <View column>
-                    <View>
+                  <View column grow>
+                    <View shrink={false}>
                       <img src={`${business.image_url}`} />
                       <View className="review" column vAlignContent="top">
                         <h4>
@@ -141,7 +150,7 @@ class Detail extends React.Component<Props> {
                         />
                       </View>
                     </View>
-                    <View>
+                    <View className="hours-reviews" wrap>
                       {this.hours(business)}
                       {this.reviews(reviews)}
                     </View>
