@@ -4,7 +4,7 @@ import axios from 'axios';
 import { identity } from 'fp-ts/lib/function';
 import * as t from 'io-ts';
 import { failure } from 'io-ts/lib/PathReporter';
-import { CONFIG } from '../config';
+import { apiEndpoint, apiKey, timeout } from '../config';
 
 export const getRestaurants = (
   searchQuery: string,
@@ -15,7 +15,7 @@ export const getRestaurants = (
     () =>
       axios({
         method: 'get',
-        url: `${CONFIG.apiEndpoint}/businesses/search`,
+        url: `${apiEndpoint}/businesses/search`,
         params: {
           location: locationQuery,
           categories: 'restaurants',
@@ -25,11 +25,11 @@ export const getRestaurants = (
         data: {},
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${CONFIG.apiKey}`,
+          Authorization: `Bearer ${apiKey}`,
           Pragma: 'no-cache',
           'Cache-Control': 'no-cache, no-store'
         },
-        timeout: CONFIG.timeout
+        timeout: timeout
       }),
     identity
   ).chain(res =>
@@ -47,16 +47,16 @@ export const getBusinessDetails = (businessId: string): TaskEither<unknown, Busi
     () =>
       axios({
         method: 'get',
-        url: `${CONFIG.apiEndpoint}/businesses/${businessId}`,
+        url: `${apiEndpoint}/businesses/${businessId}`,
         params: {},
         data: {},
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${CONFIG.apiKey}`,
+          Authorization: `Bearer ${apiKey}`,
           Pragma: 'no-cache',
           'Cache-Control': 'no-cache, no-store'
         },
-        timeout: CONFIG.timeout
+        timeout: timeout
       }),
     identity
   ).chain(res =>
@@ -69,16 +69,16 @@ export const getReviews = (businessId: string): TaskEither<unknown, Array<Review
     () =>
       axios({
         method: 'get',
-        url: `${CONFIG.apiEndpoint}/businesses/${businessId}/reviews`,
+        url: `${apiEndpoint}/businesses/${businessId}/reviews`,
         params: {},
         data: {},
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${CONFIG.apiKey}`,
+          Authorization: `Bearer ${apiKey}`,
           Pragma: 'no-cache',
           'Cache-Control': 'no-cache, no-store'
         },
-        timeout: CONFIG.timeout
+        timeout: timeout
       }),
     identity
   ).chain(res =>
