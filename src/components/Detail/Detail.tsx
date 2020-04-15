@@ -5,7 +5,7 @@ import { WithQueries } from 'avenger/lib/react';
 import { LoadingSpinner, Panel, Badge } from '../Basic';
 import { business, reviews } from '../../queries/queries';
 import { formatDay } from '../../util/localization';
-import { Day, Business, Review } from 'src/model';
+import { Business, Review, Day } from '../../model';
 
 import './detail.scss';
 

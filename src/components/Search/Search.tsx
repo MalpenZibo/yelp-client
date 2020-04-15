@@ -5,11 +5,11 @@ import { restaurants } from '../../queries/queries';
 import { Panel, LoadingSpinner, View, SingleDropdown, Input } from '../Basic';
 import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl';
 import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
-import _ = require('lodash');
 import { some } from 'fp-ts/lib/Option';
+import { SearchFilters, RadiusValue } from '../../model';
+import * as _ from 'lodash';
 
 import './search.scss';
-import { SearchFilters, RadiusValue } from 'src/model';
 
 type Props = {
   filters: SearchFilters;

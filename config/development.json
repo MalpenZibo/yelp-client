@@ -1,7 +1,0 @@
-{
-  "bundle": {
-    "apiEndpoint": "http://localhost:1337/api.yelp.com/v3",
-    "timeout": 60000
-  },
-  "devTool": "eval-source-map"
-}

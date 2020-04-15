@@ -1,4 +1,4 @@
-import { addLocaleDataAndResolve } from '../util/intl';
+import { addLocaleDataAndResolve, IntlData } from '../util/intl';
 
 /*
 
@@ -12,10 +12,10 @@ The documentation for `react-intl/locale-data` packages can be found at https://
 
 */
 
-type Locale = 'it' | 'en';
+//type Locale = 'it' | 'en';
 
-export function loadLocale(locale: Locale) {
-  return new Promise(resolve => {
+export function loadLocale(locale: string) {
+  return new Promise<IntlData>(resolve => {
     switch (locale) {
       case 'it':
         // @ts-ignore

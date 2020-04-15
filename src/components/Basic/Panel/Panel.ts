@@ -1,4 +1,4 @@
 import Panel from 'buildo-react-components/lib/Panel';
-import './Panel.scss';
+import './panel.scss';
 
 export default Panel;

@@ -1,10 +1,10 @@
 import { TaskEither, tryCatch, fromEither } from 'fp-ts/lib/TaskEither';
 import { Business, Review } from '../model';
 import axios from 'axios';
-import * as config from '../config';
 import { identity } from 'fp-ts/lib/function';
 import * as t from 'io-ts';
 import { failure } from 'io-ts/lib/PathReporter';
+import { CONFIG } from '../config';
 
 export const getRestaurants = (
   searchQuery: string,
@@ -15,7 +15,7 @@ export const getRestaurants = (
     () =>
       axios({
         method: 'get',
-        url: `${config.apiEndpoint}/businesses/search`,
+        url: `${CONFIG.apiEndpoint}/businesses/search`,
         params: {
           location: locationQuery,
           categories: 'restaurants',
@@ -25,11 +25,11 @@ export const getRestaurants = (
         data: {},
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${config.apiKey}`,
+          Authorization: `Bearer ${CONFIG.apiKey}`,
           Pragma: 'no-cache',
           'Cache-Control': 'no-cache, no-store'
         },
-        timeout: config.timeout
+        timeout: CONFIG.timeout
       }),
     identity
   ).chain(res =>
@@ -47,16 +47,16 @@ export const getBusinessDetails = (businessId: string): TaskEither<unknown, Busi
     () =>
       axios({
         method: 'get',
-        url: `${config.apiEndpoint}/businesses/${businessId}`,
+        url: `${CONFIG.apiEndpoint}/businesses/${businessId}`,
         params: {},
         data: {},
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${config.apiKey}`,
+          Authorization: `Bearer ${CONFIG.apiKey}`,
           Pragma: 'no-cache',
           'Cache-Control': 'no-cache, no-store'
         },
-        timeout: config.timeout
+        timeout: CONFIG.timeout
       }),
     identity
   ).chain(res =>
@@ -69,16 +69,16 @@ export const getReviews = (businessId: string): TaskEither<unknown, Array<Review
     () =>
       axios({
         method: 'get',
-        url: `${config.apiEndpoint}/businesses/${businessId}/reviews`,
+        url: `${CONFIG.apiEndpoint}/businesses/${businessId}/reviews`,
         params: {},
         data: {},
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${config.apiKey}`,
+          Authorization: `Bearer ${CONFIG.apiKey}`,
           Pragma: 'no-cache',
           'Cache-Control': 'no-cache, no-store'
         },
-        timeout: config.timeout
+        timeout: CONFIG.timeout
       }),
     identity
   ).chain(res =>
