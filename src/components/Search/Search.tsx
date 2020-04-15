@@ -3,7 +3,7 @@ import { doUpdateCurrentView } from '../../commands';
 import { WithQueries } from 'avenger/lib/react';
 import { restaurants } from '../../queries/queries';
 import { Panel, LoadingSpinner, View, SingleDropdown, Input } from '../Basic';
-import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
 import { some } from 'fp-ts/lib/Option';
 import { SearchFilters, RadiusValue } from '../../model';
@@ -14,7 +14,7 @@ import './search.scss';
 type Props = {
   filters: SearchFilters;
   setFilter: (filters: SearchFilters) => void;
-} & InjectedIntlProps;
+} & WrappedComponentProps;
 
 type State = {
   termQuery: string;
@@ -112,9 +112,7 @@ class Search extends React.Component<Props, State> {
           />
           <View className="location">
             <View column vAlignContent="center">
-              <h5>
-                <FormattedMessage id="Search.locationLabel" />
-              </h5>
+              <FormattedMessage tagName="h5" id="Search.locationLabel" />
               <Input
                 placeholder={intl.formatMessage({ id: 'Search.locationNeeded' })}
                 value={this.state.locationInput}
@@ -122,9 +120,7 @@ class Search extends React.Component<Props, State> {
               />
             </View>
             <View column vAlignContent="center">
-              <h5>
-                <FormattedMessage id="Search.radiusLabel" />
-              </h5>
+              <FormattedMessage tagName="h5" id="Search.radiusLabel" />
               <SingleDropdown
                 value={this.state.radiusQuery}
                 onChange={this.onRadiusChange}
@@ -175,10 +171,12 @@ class Search extends React.Component<Props, State> {
                               <View className="review" column vAlignContent="top">
                                 <FormattedMessage
                                   id="Search.rating"
+                                  tagName="div"
                                   values={{ rating: r.rating }}
                                 />
                                 <FormattedMessage
                                   id="Search.review"
+                                  tagName="div"
                                   values={{ review: r.review_count }}
                                 />
                               </View>
@@ -186,6 +184,7 @@ class Search extends React.Component<Props, State> {
                             <View column>
                               <FormattedMessage
                                 id="Search.address"
+                                tagName="div"
                                 values={{ address: r.location.display_address.join(' ') }}
                               />
                             </View>

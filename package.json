@@ -10,6 +10,8 @@
     "build-old": "NODE_ENV=production scriptoni web-build -c ./config"
   },
   "dependencies": {
+    "@formatjs/intl-pluralrules": "^1.5.5",
+    "@formatjs/intl-relativetimeformat": "^4.5.12",
     "avenger": "^5.3.0",
     "axios": "^0.19.2",
     "buildo-normalize-css": "^3.0.2",
@@ -17,27 +19,26 @@
     "classnames": "^2.2.6",
     "es6-promise": "^4.2.8",
     "io-ts-types": "^0.5.6",
-    "react-flexview": "^4.0.4",
-    "react-intl": "^2.9.0",
     "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-flexview": "^4.0.4",
+    "react-intl": "^4.4.0",
     "react-scripts": "3.4.1",
-    "typescript": "~3.7.2"
+    "typescript": "~3.8.3"
   },
   "devDependencies": {
-    "@types/classnames": "^2.2.10",
-    "@types/fixed-data-table": "^0.6.35",
-    "@types/react-intl": "^2.3.18",
-    "@types/lodash": "^4.14.149",
-    "scriptoni": "^9.0.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/classnames": "^2.2.10",
+    "@types/fixed-data-table": "^0.6.35",
     "@types/jest": "^24.0.0",
+    "@types/lodash": "^4.14.149",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0"
+    "@types/react-dom": "^16.9.0",
+    "scriptoni": "^9.0.0"
   },
   "eslintConfig": {
     "extends": "react-app"

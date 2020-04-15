@@ -22,7 +22,7 @@
     "noFallthroughCasesInSwitch": true,
     "removeComments": true
   },
-  "include": ["src", "typings"]
+  "include": ["src"]
 }
 
 /*
