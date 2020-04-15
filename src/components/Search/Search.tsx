@@ -48,7 +48,7 @@ class Search extends React.Component<Props, State> {
     locationQuery: this.props.filters.location.getOrElse(defaultLocation),
     locationInput: this.props.filters.location.getOrElse(defaultLocation),
     radiusQuery: radiusOptions
-      .findFirst(ro => ro.value == this.props.filters.radius.getOrElse(radiusOptions.head.value))
+      .findFirst(ro => ro.value === this.props.filters.radius.getOrElse(radiusOptions.head.value))
       .getOrElse(radiusOptions.head)
   };
 
@@ -171,7 +171,7 @@ class Search extends React.Component<Props, State> {
                         <Panel type="floating" header={{ title: r.name }}>
                           <View column>
                             <View>
-                              <img src={`${r.image_url}`} />
+                              <img src={`${r.image_url}`} alt="restaurant_img" />
                               <View className="review" column vAlignContent="top">
                                 <FormattedMessage
                                   id="Search.rating"

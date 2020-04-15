@@ -43,10 +43,10 @@ export default class MasterDetailNav extends React.Component<Props, State> {
   };
 
   masterDetailHeader = (currentView: CurrentView) => {
-    if (currentView.view == detail.viewType) {
+    if (currentView.view === detail.viewType) {
       return (
         <View className="nav">
-          <a onClick={() => this.goToMaster()}>{master.label}</a>
+          <button onClick={() => this.goToMaster()}>{master.label}</button>
           <strong>{detail.label}</strong>
         </View>
       );

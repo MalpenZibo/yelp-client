@@ -113,7 +113,7 @@ class Detail extends React.Component<Props> {
                 <Panel className="detail" type="floating" header={{ title: business.name }}>
                   <View column grow>
                     <View shrink={false}>
-                      <img src={`${business.image_url}`} />
+                      <img src={`${business.image_url}`} alt="business_image" />
                       <View className="review" column vAlignContent="top">
                         <h4>
                           <FormattedMessage id="Business.categories" />
