@@ -21,12 +21,19 @@
     .nav {
       cursor: default;
 
-      a {
+      button {
+        background: none !important;
+        border: none;
+        padding: 0 !important;
+        text-decoration: none;
         margin-right: 15px;
+        font-size: 14px;
+        font-weight: $regular;
+        color: $darkGrey;
         cursor: pointer;
       }
 
-      a:after {
+      button:after {
         margin-left: 15px;
         content: '>';
       }

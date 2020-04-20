@@ -1,26 +1,24 @@
 import * as React from 'react';
 import View from '../Basic/View';
-import { InjectedIntlProps, injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage, WrappedComponentProps } from 'react-intl';
 import { WithQueries } from 'avenger/lib/react';
 import { LoadingSpinner, Panel, Badge } from '../Basic';
 import { business, reviews } from '../../queries/queries';
 import { formatDay } from '../../util/localization';
-import { Day, Business, Review } from 'src/model';
+import { Business, Review, Day } from '../../model';
 
 import './detail.scss';
 
 type Props = {
   businessId: string;
-} & InjectedIntlProps;
+} & WrappedComponentProps;
 
 class Detail extends React.Component<Props> {
   hours = (business: Business): JSX.Element => {
     const intl = this.props.intl;
     return business.hours.fold(<FormattedMessage id="Business.noHours" />, someHours => (
       <View column>
-        <h4>
-          <FormattedMessage id="Business.hours" />
-        </h4>
+        <FormattedMessage tagName="h4" id="Business.hours" />
         <View>
           {someHours.map((h, index) => (
             <View column key={index}>
@@ -60,15 +58,14 @@ class Detail extends React.Component<Props> {
     const intl = this.props.intl;
     return (
       <View column>
-        <h4>
-          <FormattedMessage id="Business.reviews" />
-        </h4>
+        <FormattedMessage tagName="h4" id="Business.reviews" />
         <View column className="review-list">
           {reviews.map(r => (
             <Panel key={r.id} type="floating" header={{ title: r.user.name }}>
               <View column className="review-content">
                 <FormattedMessage
                   id="Business.review.info"
+                  tagName="div"
                   values={{
                     rating: r.rating,
                     created: intl.formatDate(r.time_created)
@@ -103,9 +100,7 @@ class Detail extends React.Component<Props> {
             ),
             () => (
               <View className="error" hAlignContent="center" vAlignContent="center" grow>
-                <h2>
-                  <FormattedMessage id="Business.loadingError" />
-                </h2>
+                <FormattedMessage tagName="h2" id="Business.loadingError" />
               </View>
             ),
             ({ business, reviews }) => {
@@ -113,37 +108,38 @@ class Detail extends React.Component<Props> {
                 <Panel className="detail" type="floating" header={{ title: business.name }}>
                   <View column grow>
                     <View shrink={false}>
-                      <img src={`${business.image_url}`} />
+                      <img src={`${business.image_url}`} alt="business_image" />
                       <View className="review" column vAlignContent="top">
-                        <h4>
-                          <FormattedMessage id="Business.categories" />
-                        </h4>
+                        <FormattedMessage tagName="h4" id="Business.categories" />
                         <View wrap>
                           {business.categories.map(c => (
                             <Badge key={c.alias} label={c.title} />
                           ))}
                         </View>
-                        <h4>
-                          <FormattedMessage id="Business.info" />
-                        </h4>
+                        <FormattedMessage tagName="h4" id="Business.info" />
                         <FormattedMessage
                           id="Business.price"
+                          tagName="div"
                           values={{ price: business.price.getOrElse('') }}
                         />
                         <FormattedMessage
                           id="Business.rating"
+                          tagName="div"
                           values={{ rating: business.rating }}
                         />
                         <FormattedMessage
                           id="Business.review"
+                          tagName="div"
                           values={{ review: business.review_count }}
                         />
                         <FormattedMessage
                           id="Business.address"
+                          tagName="div"
                           values={{ address: business.location.display_address.join(' ') }}
                         />
                         <FormattedMessage
                           id="Business.phone"
+                          tagName="div"
                           values={{ phone: business.display_phone }}
                         />
                       </View>

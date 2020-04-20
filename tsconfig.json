@@ -1,9 +1,66 @@
 {
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": false, //CRA default true but cause problem with setup/addDeviceClassName
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react",
+
+    //readd from old
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "removeComments": true
+  },
+  "include": ["src"]
+}
+
+/*
+COMPLETE OLD CONFIG FOR REFERENCE
+
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "esnext",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "sourceMap": false,
+    "allowJs": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "pretty": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "jsx": "react",
+    "removeComments": true,
+    "lib": ["esnext", "dom"]
+  },
+  "include": ["src", "typings"],
+  "exclude": ["node_modules", "test/template-app"]
+}
+
+EXTENDEND BY
+
+{
   "extends": "./node_modules/scriptoni/lib/scripts/webpack/tsconfig.json",
   "compilerOptions": {
     "lib": ["es2018", "dom"],
     "baseUrl": ".",
     "sourceMap": true
   },
-  "include": ["src/**/*", "typings"]
+  "include": ["src/**\/*", "typings"]
 }
+
+
+*/

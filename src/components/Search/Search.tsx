@@ -3,18 +3,18 @@ import { doUpdateCurrentView } from '../../commands';
 import { WithQueries } from 'avenger/lib/react';
 import { restaurants } from '../../queries/queries';
 import { Panel, LoadingSpinner, View, SingleDropdown, Input } from '../Basic';
-import { FormattedMessage, InjectedIntlProps, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray';
-import _ = require('lodash');
 import { some } from 'fp-ts/lib/Option';
+import { SearchFilters, RadiusValue } from '../../model';
+import * as _ from 'lodash';
 
 import './search.scss';
-import { SearchFilters, RadiusValue } from 'src/model';
 
 type Props = {
   filters: SearchFilters;
   setFilter: (filters: SearchFilters) => void;
-} & InjectedIntlProps;
+} & WrappedComponentProps;
 
 type State = {
   termQuery: string;
@@ -48,7 +48,7 @@ class Search extends React.Component<Props, State> {
     locationQuery: this.props.filters.location.getOrElse(defaultLocation),
     locationInput: this.props.filters.location.getOrElse(defaultLocation),
     radiusQuery: radiusOptions
-      .findFirst(ro => ro.value == this.props.filters.radius.getOrElse(radiusOptions.head.value))
+      .findFirst(ro => ro.value === this.props.filters.radius.getOrElse(radiusOptions.head.value))
       .getOrElse(radiusOptions.head)
   };
 
@@ -112,9 +112,7 @@ class Search extends React.Component<Props, State> {
           />
           <View className="location">
             <View column vAlignContent="center">
-              <h5>
-                <FormattedMessage id="Search.locationLabel" />
-              </h5>
+              <FormattedMessage tagName="h5" id="Search.locationLabel" />
               <Input
                 placeholder={intl.formatMessage({ id: 'Search.locationNeeded' })}
                 value={this.state.locationInput}
@@ -122,9 +120,7 @@ class Search extends React.Component<Props, State> {
               />
             </View>
             <View column vAlignContent="center">
-              <h5>
-                <FormattedMessage id="Search.radiusLabel" />
-              </h5>
+              <FormattedMessage tagName="h5" id="Search.radiusLabel" />
               <SingleDropdown
                 value={this.state.radiusQuery}
                 onChange={this.onRadiusChange}
@@ -171,14 +167,16 @@ class Search extends React.Component<Props, State> {
                         <Panel type="floating" header={{ title: r.name }}>
                           <View column>
                             <View>
-                              <img src={`${r.image_url}`} />
+                              <img src={`${r.image_url}`} alt="restaurant_img" />
                               <View className="review" column vAlignContent="top">
                                 <FormattedMessage
                                   id="Search.rating"
+                                  tagName="div"
                                   values={{ rating: r.rating }}
                                 />
                                 <FormattedMessage
                                   id="Search.review"
+                                  tagName="div"
                                   values={{ review: r.review_count }}
                                 />
                               </View>
@@ -186,6 +184,7 @@ class Search extends React.Component<Props, State> {
                             <View column>
                               <FormattedMessage
                                 id="Search.address"
+                                tagName="div"
                                 values={{ address: r.location.display_address.join(' ') }}
                               />
                             </View>
